@@ -1748,19 +1748,54 @@ function showPrevOrders(data) {
   if (orders.length === 0) {
     list.innerHTML = `<div style="font-family:var(--font-serif);font-style:italic;color:var(--stone);padding:1rem 0;">Belum ada riwayat pesanan online.</div>`;
   } else {
-    // lastOrders adalah array of string seperti "Jus Jeruk x2, Smoothie Alpukat x1"
     list.innerHTML = orders.slice(-3).reverse().map((order, idx) => `
-      <div style="padding:0.8rem 0;border-bottom:1px solid var(--linen)">
-        <div style="font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--stone);margin-bottom:0.3rem">
+      <div class="prev-order-item" style="flex-direction:column;align-items:flex-start;gap:0.5rem">
+        <div style="font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--stone)">
           Pesanan ${idx === 0 ? 'terakhir' : idx === 1 ? '2 pesanan lalu' : '3 pesanan lalu'}
-          ${order.date ? '· ' + new Date(order.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : ''}
+          ${order.date ? '· ' + String(order.date).substring(0,10) : ''}
         </div>
-        <div style="font-family:var(--font-serif);font-style:italic;font-size:0.9rem;color:var(--soft-black)">${order.items}</div>
-        ${order.total ? `<div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--accent-green);margin-top:0.2rem">Rp ${Number(order.total).toLocaleString('id-ID')}</div>` : ''}
+        <div style="font-family:var(--font-serif);font-style:italic;font-size:0.9rem;color:var(--soft-black);line-height:1.5">${order.items}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
+          ${order.total ? `<div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--accent-green)">Rp ${Number(order.total).toLocaleString('id-ID')}</div>` : '<div></div>'}
+          <button class="poi-rebuy" onclick="reorderFromString('${order.items.replace(/'/g,"\\'")}')">+ Pesan Lagi</button>
+        </div>
       </div>
     `).join('');
   }
   document.getElementById('prevOrderOverlay').classList.add('open');
+}
+
+// Parse string "Jus Jeruk ×2, Smoothie Alpukat ×1" dan tambahkan ke cart
+function reorderFromString(itemsStr) {
+  // Split per koma, parse nama dan qty
+  const parts = itemsStr.split(',').map(s => s.trim());
+  let added = 0;
+
+  parts.forEach(part => {
+    // Format: "Nama Item ×N" atau "Nama Item xN"
+    const match = part.match(/^(.+?)\s*[x×]\s*(\d+)$/i);
+    if (!match) return;
+    const nama = match[1].trim();
+    const qty  = parseInt(match[2]) || 1;
+
+    // Cari produk yang namanya cocok (case insensitive)
+    const p = products.find(x => x.name.toLowerCase() === nama.toLowerCase());
+    if (p) {
+      if (cart[p.id]) cart[p.id].qty += qty;
+      else cart[p.id] = { ...p, qty };
+      added++;
+    }
+  });
+
+  if (added > 0) {
+    updateCartUI();
+    closePrevOrder();
+    openCart();
+  } else {
+    // Produk tidak ditemukan di menu (mungkin menu sudah berubah)
+    alert('Beberapa item tidak tersedia lagi di menu sekarang 🌿');
+    closePrevOrder();
+  }
 }
 
 function closePrevOrder() {
@@ -2038,12 +2073,27 @@ function setRating(n) {
   document.querySelectorAll('.star-btn').forEach((btn, i) => btn.classList.toggle('lit', i < n));
 }
 
-function submitTestimony() {
+async function submitTestimony() {
   const name = document.getElementById('testiName').value.trim();
   const phone = document.getElementById('testiPhone').value.trim();
   const msg = document.getElementById('testiMsg').value.trim();
+  const hidePrivacy = document.getElementById('hidePrivacy').checked;
   if (!name || !phone || !msg || selectedRating === 0) { alert('Lengkapi semua kolom dan rating ya! 🌿'); return; }
-  console.log('Testimony submitted:', { name, phone, rating: selectedRating, message: msg });
+
+  // Simpan ke Google Sheets
+  try {
+    await apiCall({
+      action: 'saveTestimoni',
+      name, phone: normalizePhone(phone),
+      rating: selectedRating,
+      message: msg,
+      hidePrivacy,
+      timestamp: new Date().toISOString()
+    });
+  } catch(e) {
+    console.warn('Gagal simpan testimoni:', e);
+  }
+
   document.getElementById('testiName').value = '';
   document.getElementById('testiPhone').value = '';
   document.getElementById('testiMsg').value = '';
