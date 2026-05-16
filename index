@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jus(t) your friend cooking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white:#FFFFFF;--off-white:#F9F8F6;--warm-white:#F4F2EE;--linen:#EDE9E2;--sand:#D8D0C4;
+  --stone:#A8A09A;--charcoal:#2C2C2C;--soft-black:#1A1A1A;--accent-green:#7A9B76;
+  --accent-peach:#E8A87C;--accent-yellow:#F2D76B;--accent-pink:#F0B8B8;
+  --font-serif:'Lora',serif;--font-sans:'Plus Jakarta Sans',sans-serif;--font-mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--soft-black);font-family:var(--font-sans);font-size:16px;overflow-x:hidden;padding-bottom:56px;}
+
+/* LANG TOGGLE */
+.lang-toggle{display:flex;align-items:center;border:1px solid var(--linen);border-radius:2rem;overflow:hidden;}
+.lang-btn{padding:.3rem .75rem;background:transparent;border:none;cursor:pointer;font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);transition:all .2s;}
+.lang-btn.active{background:var(--soft-black);color:var(--white);border-radius:2rem;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--linen);gap:1rem;}
+.nav-logo{font-family:var(--font-serif);font-size:1.1rem;font-weight:400;color:var(--soft-black);text-decoration:none;flex-shrink:0;}
+.nav-logo span{font-style:italic;color:var(--accent-green);}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--soft-black);}
+.nav-right{display:flex;align-items:center;gap:.8rem;flex-shrink:0;}
+.nav-member-pill{display:none;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--linen);padding:.45rem .9rem;cursor:pointer;background:var(--off-white);transition:all .2s;white-space:nowrap;border-radius:2rem;}
+.nav-member-pill:hover{border-color:var(--accent-green);}
+.nav-member-pill.visible{display:flex;}
+.nav-member-dot{width:7px;height:7px;border-radius:50%;background:var(--accent-green);flex-shrink:0;}
+.nav-member-name{color:var(--soft-black);max-width:100px;overflow:hidden;text-overflow:ellipsis;}
+.nav-member-change{color:var(--stone);font-size:.55rem;}
+.nav-cart-btn{position:relative;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;background:var(--soft-black);color:var(--white);border:none;cursor:pointer;padding:.6rem 1.4rem;transition:background .2s;}
+.nav-cart-btn:hover{background:var(--accent-green);}
+.cart-badge{position:absolute;top:-7px;right:-7px;background:var(--accent-peach);color:var(--white);font-size:.55rem;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;font-family:var(--font-mono);}
+
+/* INFO BANNER */
+.info-banner{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--soft-black);color:var(--white);}
+.info-banner-inner{display:flex;align-items:stretch;min-height:56px;}
+.info-slides{flex:1;overflow:hidden;position:relative;min-height:56px;}
+.info-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:.5rem 3rem;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75);opacity:0;transition:opacity .6s ease;text-align:center;gap:.5rem;flex-wrap:wrap;}
+.info-slide.active{opacity:1;}
+.info-slide strong{color:var(--accent-yellow);font-weight:400;}
+.info-slide .sdot{color:var(--accent-green);margin:0 .3rem;}
+.info-banner-nav{display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;flex-shrink:0;}
+.info-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .2s;border:none;}
+.info-dot.active{background:var(--accent-green);}
+.info-banner-close{background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:.9rem;padding:.5rem 1rem;transition:color .2s;}
+.info-banner-close:hover{color:var(--white);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:7rem 4rem 4rem;position:relative;overflow:hidden;background:var(--white);}
+.hero-bg-circle{position:absolute;border-radius:50%;pointer-events:none;}
+.hero-bg-1{width:500px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(122,155,118,.08) 0%,transparent 70%);}
+.hero-bg-2{width:300px;height:300px;bottom:0;left:10%;background:radial-gradient(circle,rgba(232,168,124,.1) 0%,transparent 70%);}
+.hero-content{max-width:600px;position:relative;z-index:1;}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-green);background:rgba(122,155,118,.08);padding:.4rem .9rem;border-radius:2rem;margin-bottom:2rem;}
+.hero-title{font-family:var(--font-serif);font-size:clamp(2.8rem,5vw,4.5rem);font-weight:300;line-height:1.1;color:var(--soft-black);margin-bottom:1.5rem;}
+.hero-title em{font-style:italic;color:var(--accent-green);}
+.hero-title .paren{color:var(--stone);}
+.hero-sub{font-size:1rem;font-weight:300;line-height:1.8;color:var(--stone);max-width:440px;margin-bottom:2.5rem;}
+.hero-cta{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;}
+.btn-primary{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;background:var(--soft-black);color:var(--white);padding:.9rem 1.8rem;text-decoration:none;border:none;cursor:pointer;transition:background .2s;display:inline-block;}
+.btn-primary:hover{background:var(--accent-green);}
+.btn-ghost{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:var(--stone);padding:.9rem 1.8rem;text-decoration:none;border:1px solid var(--linen);cursor:pointer;transition:all .2s;display:inline-block;}
+.btn-ghost:hover{border-color:var(--stone);color:var(--soft-black);}
+.hero-right{position:absolute;right:4rem;top:50%;transform:translateY(-50%);display:grid;grid-template-columns:1fr 1fr;gap:1rem;opacity:.9;}
+.fruit-pill{background:var(--off-white);border:1px solid var(--linen);padding:1rem 1.4rem;display:flex;align-items:center;gap:.7rem;font-size:.85rem;color:var(--charcoal);white-space:nowrap;animation:floatPill 3s ease-in-out infinite;}
+.fruit-pill:nth-child(2){animation-delay:.4s;}.fruit-pill:nth-child(3){animation-delay:.8s;}.fruit-pill:nth-child(4){animation-delay:1.2s;}.fruit-pill:nth-child(5){animation-delay:1.6s;}.fruit-pill:nth-child(6){animation-delay:2s;}
+.fruit-emoji{font-size:1.3rem;}
+@keyframes floatPill{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+
+/* MARQUEE */
+.marquee-wrap{background:var(--soft-black);padding:.8rem 0;overflow:hidden;}
+.marquee-track{display:flex;gap:3rem;animation:marquee 20s linear infinite;white-space:nowrap;}
+.marquee-item{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);flex-shrink:0;}
+.marquee-dot{color:var(--accent-green);margin:0 1rem;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* SECTION BASE */
+.section-tag{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--stone);margin-bottom:.8rem;}
+.section-title{font-family:var(--font-serif);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;color:var(--soft-black);line-height:1.2;}
+.section-title em{font-style:italic;color:var(--accent-green);}
+
+/* MENU */
+.menu{padding:7rem 4rem;background:var(--white);}
+.menu-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;padding-bottom:1.5rem;border-bottom:1px solid var(--linen);flex-wrap:wrap;gap:1.5rem;}
+.filter-row{display:flex;gap:.5rem;flex-wrap:wrap;}
+.filter-btn{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.45rem 1rem;background:transparent;border:1px solid var(--linen);color:var(--stone);cursor:pointer;border-radius:2rem;transition:all .2s;}
+.filter-btn:hover,.filter-btn.active{background:var(--soft-black);color:var(--white);border-color:var(--soft-black);}
+.fruit-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.fruit-tab{font-family:var(--font-sans);font-size:.78rem;font-weight:400;padding:.4rem 1rem;background:var(--off-white);border:1px solid var(--linen);color:var(--stone);cursor:pointer;border-radius:2rem;transition:all .2s;}
+.fruit-tab:hover,.fruit-tab.active{background:var(--accent-green);color:var(--white);border-color:var(--accent-green);}
+.fruit-tabs-wrap{display:none;}.fruit-tabs-wrap.visible{display:block;}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.5rem;}
+.product-card{background:var(--off-white);border:1px solid var(--linen);cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s;position:relative;overflow:hidden;}
+.product-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.06);border-color:var(--sand);}
+.product-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;}
+.product-badge{position:absolute;top:.8rem;left:.8rem;font-family:var(--font-mono);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .6rem;background:var(--soft-black);color:var(--white);border-radius:2rem;}
+.product-body{padding:1.2rem;}
+.product-fruit-tag{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent-green);margin-bottom:.4rem;}
+.product-name{font-family:var(--font-serif);font-size:1.05rem;font-weight:400;font-style:italic;color:var(--soft-black);margin-bottom:.3rem;}
+.product-desc{font-size:.8rem;font-weight:300;color:var(--stone);line-height:1.5;margin-bottom:1rem;}
+.product-footer{display:flex;align-items:center;justify-content:space-between;}
+.product-price{font-family:var(--font-serif);font-size:1.2rem;font-weight:300;color:var(--soft-black);}
+.product-price small{font-family:var(--font-mono);font-size:.55rem;color:var(--stone);vertical-align:super;}
+.btn-add{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;background:var(--soft-black);color:var(--white);padding:.5rem .9rem;border:none;cursor:pointer;border-radius:2rem;transition:background .2s;}
+.btn-add:hover{background:var(--accent-green);}
+
+/* SUBSCRIPTION */
+.subscription-section{background:var(--soft-black);padding:7rem 4rem;}
+.sub-header{text-align:center;margin-bottom:3.5rem;}
+.sub-tag{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent-green);margin-bottom:.8rem;}
+.sub-title{font-family:var(--font-serif);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;color:var(--white);line-height:1.2;margin-bottom:.8rem;}
+.sub-title em{font-style:italic;color:var(--accent-yellow);}
+.sub-desc{font-size:.9rem;font-weight:300;color:rgba(255,255,255,.55);line-height:1.8;max-width:520px;margin:0 auto;}
+.sub-packages{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-bottom:3rem;}
+.sub-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:2rem;position:relative;transition:all .25s;cursor:pointer;}
+.sub-card:hover,.sub-card.selected{border-color:var(--accent-green);background:rgba(122,155,118,.1);}
+.sub-card-badge{position:absolute;top:-1px;right:1.5rem;font-family:var(--font-mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;background:var(--accent-green);color:var(--white);padding:.2rem .7rem;}
+.sub-card-icon{font-size:2.5rem;margin-bottom:1rem;}
+.sub-card-name{font-family:var(--font-serif);font-size:1.3rem;font-weight:300;font-style:italic;color:var(--white);margin-bottom:.3rem;}
+.sub-card-tagline{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-green);margin-bottom:1rem;}
+.sub-card-items{list-style:none;margin-bottom:1.5rem;}
+.sub-card-items li{font-size:.82rem;font-weight:300;color:rgba(255,255,255,.65);padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;gap:.5rem;}
+.sub-card-items li::before{content:'–';color:var(--accent-green);flex-shrink:0;}
+.sub-card-price{font-family:var(--font-serif);font-size:1.8rem;font-weight:300;color:var(--white);margin-bottom:.2rem;}
+.sub-card-price-note{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);}
+.sub-select-btn{margin-top:1.5rem;width:100%;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.15);padding:.8rem;cursor:pointer;transition:all .2s;}
+.sub-card:hover .sub-select-btn,.sub-card.selected .sub-select-btn{background:var(--accent-green);color:var(--white);border-color:var(--accent-green);}
+.sub-note{text-align:center;font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;}
+.sub-note span::before{content:'✓ ';color:var(--accent-green);}
+
+/* REBUS */
+.rebus-section{background:var(--off-white);padding:5rem 4rem;border-top:1px solid var(--linen);border-bottom:1px solid var(--linen);}
+.rebus-inner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.rebus-desc{font-size:.95rem;font-weight:300;color:var(--stone);line-height:1.8;margin-bottom:2rem;}
+.rebus-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.rebus-item{background:var(--white);border:1px solid var(--linen);padding:1.2rem;display:flex;flex-direction:column;gap:.5rem;}
+.rebus-emoji{font-size:2rem;}
+.rebus-name{font-family:var(--font-serif);font-size:.95rem;font-style:italic;color:var(--soft-black);}
+.rebus-price-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:auto;}
+.rebus-price-tag{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.08em;padding:.2rem .6rem;border-radius:2rem;background:var(--linen);color:var(--charcoal);cursor:pointer;transition:all .2s;border:1px solid transparent;}
+.rebus-price-tag:hover,.rebus-price-tag.selected{background:var(--soft-black);color:var(--white);}
+
+/* ABOUT */
+.about{padding:7rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
+.about-visual{position:relative;height:420px;}
+.about-block{position:absolute;border:1px solid var(--linen);}
+.ab1{top:0;left:0;right:3rem;bottom:3rem;background:var(--off-white);display:flex;align-items:center;justify-content:center;}
+.ab2{bottom:0;right:0;width:55%;height:45%;background:var(--linen);}
+.about-big{font-family:var(--font-serif);font-size:5rem;font-weight:300;font-style:italic;color:var(--sand);line-height:1;text-align:center;}
+.about-title{margin-bottom:1.2rem;}
+.about-desc{font-size:.95rem;font-weight:300;line-height:1.9;color:var(--stone);margin-bottom:1.5rem;}
+.about-52{background:var(--off-white);border:1px solid var(--linen);padding:1.5rem;margin-bottom:2rem;}
+.about-52-number{font-family:var(--font-serif);font-size:3rem;font-weight:300;font-style:italic;color:var(--accent-green);line-height:1;margin-bottom:.5rem;}
+.about-52-items{display:flex;flex-direction:column;gap:.4rem;}
+.about-52-item{font-size:.82rem;font-weight:300;color:var(--charcoal);display:flex;align-items:flex-start;gap:.5rem;}
+.about-52-item::before{content:'·';color:var(--accent-green);font-size:1.2rem;line-height:1;flex-shrink:0;}
+.about-hours{border-top:1px solid var(--linen);padding-top:1.5rem;}
+.hours-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--stone);margin-bottom:.8rem;}
+.hours-row{display:flex;justify-content:space-between;font-size:.9rem;font-weight:300;color:var(--charcoal);padding:.4rem 0;border-bottom:1px solid var(--linen);}
+
+/* TESTIMONY */
+.testimony{padding:7rem 4rem;background:var(--off-white);}
+.testimony-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;flex-wrap:wrap;gap:1rem;}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;margin-bottom:3rem;}
+.testi-card{background:var(--white);border:1px solid var(--linen);padding:1.8rem;}
+.testi-stars{color:var(--accent-peach);font-size:.8rem;margin-bottom:.8rem;}
+.testi-text{font-family:var(--font-serif);font-style:italic;font-size:.95rem;line-height:1.7;color:var(--charcoal);margin-bottom:1rem;}
+.testi-author{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);}
+.testimony-form-wrap{background:var(--white);border:1px solid var(--linen);padding:2.5rem;max-width:640px;}
+.form-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:300;font-style:italic;color:var(--soft-black);margin-bottom:.4rem;}
+.form-subtitle{font-size:.8rem;font-weight:300;color:var(--stone);margin-bottom:1.8rem;line-height:1.6;}
+.form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.1rem;}
+.form-label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);}
+.form-input,.form-textarea,.form-select{font-family:var(--font-sans);font-size:.9rem;font-weight:300;padding:.75rem 1rem;background:var(--off-white);border:1px solid var(--linen);color:var(--soft-black);outline:none;transition:border-color .2s;border-radius:0;width:100%;}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--accent-green);background:var(--white);}
+.form-textarea{min-height:90px;resize:vertical;}
+.form-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23A8A09A' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem;}
+.form-stars{display:flex;gap:.3rem;margin-bottom:.5rem;}
+.star-btn{font-size:1.3rem;background:none;border:none;cursor:pointer;color:var(--linen);transition:color .15s;}
+.star-btn.lit{color:var(--accent-peach);}
+.privacy-row{display:flex;align-items:flex-start;gap:.7rem;margin-bottom:1.5rem;background:var(--off-white);padding:1rem;border:1px solid var(--linen);}
+.privacy-checkbox{margin-top:2px;accent-color:var(--accent-green);width:15px;height:15px;flex-shrink:0;}
+.privacy-label{font-size:.78rem;font-weight:300;color:var(--stone);line-height:1.5;}
+.privacy-label strong{color:var(--charcoal);font-weight:500;}
+.form-note{font-size:.72rem;font-weight:300;color:var(--stone);font-style:italic;margin-bottom:1.2rem;line-height:1.5;}
+
+/* CONTACT */
+.contact{padding:7rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;}
+.contact-info{display:flex;flex-direction:column;}
+.contact-row{display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 0;border-bottom:1px solid var(--linen);}
+.contact-icon{font-size:1rem;width:2rem;padding-top:2px;}
+.c-label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);margin-bottom:.2rem;}
+.c-val{font-size:.9rem;font-weight:300;color:var(--charcoal);}
+
+/* FOOTER */
+footer{background:var(--soft-black);color:var(--white);padding:2.5rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-logo{font-family:var(--font-serif);font-size:1.1rem;font-weight:300;font-style:italic;color:rgba(255,255,255,.7);}
+.footer-logo span{color:var(--accent-green);}
+.footer-copy{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.25);}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:rgba(255,255,255,.8);}
+
+/* CART */
+.cart-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.25);backdrop-filter:blur(4px);display:none;}
+.cart-overlay.open{display:block;}
+.cart-panel{position:fixed;top:0;right:0;bottom:0;width:420px;background:var(--white);z-index:201;transform:translateX(100%);transition:transform .35s ease;display:flex;flex-direction:column;border-left:1px solid var(--linen);}
+.cart-panel.open{transform:translateX(0);}
+.cart-head{display:flex;align-items:center;justify-content:space-between;padding:1.8rem 2rem;border-bottom:1px solid var(--linen);}
+.cart-head-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:300;font-style:italic;}
+.cart-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--stone);}
+.cart-items-list{flex:1;overflow-y:auto;padding:1.5rem 2rem;}
+.cart-empty-msg{font-family:var(--font-serif);font-style:italic;color:var(--stone);font-size:.95rem;text-align:center;padding:3rem 0;}
+.cart-item{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--linen);}
+.ci-emoji{font-size:1.8rem;width:3rem;text-align:center;}
+.ci-info{flex:1;}
+.ci-name{font-family:var(--font-serif);font-style:italic;font-size:.95rem;color:var(--soft-black);}
+.ci-price{font-family:var(--font-mono);font-size:.7rem;color:var(--stone);margin-top:.2rem;}
+.ci-qty{display:flex;align-items:center;gap:.5rem;}
+.qty-btn{width:26px;height:26px;background:var(--off-white);border:1px solid var(--linen);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all .15s;}
+.qty-btn:hover{background:var(--soft-black);color:var(--white);border-color:var(--soft-black);}
+.qty-num{font-family:var(--font-mono);font-size:.8rem;min-width:1.2rem;text-align:center;}
+.cart-foot{padding:1.5rem 2rem;border-top:1px solid var(--linen);}
+.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.2rem;}
+.cart-total-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);}
+.cart-total-val{font-family:var(--font-serif);font-size:1.8rem;font-weight:300;color:var(--soft-black);}
+.btn-pay{width:100%;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;background:var(--soft-black);color:var(--white);padding:1rem;border:none;cursor:pointer;transition:background .2s;}
+.btn-pay:hover{background:var(--accent-green);}
+
+/* MODALS base */
+.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:2rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--white);width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--linen);padding:2.5rem;position:relative;animation:slideUp .35s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.modal-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--stone);}
+.modal-title{font-family:var(--font-serif);font-size:1.6rem;font-weight:300;font-style:italic;margin-bottom:.5rem;}
+.modal-sub{font-size:.82rem;font-weight:300;color:var(--stone);margin-bottom:1.8rem;line-height:1.6;}
+
+/* PAY MODAL specifics */
+.delivery-tabs{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.8rem;}
+.delivery-tab{border:2px solid var(--linen);background:var(--off-white);padding:1.2rem 1rem;cursor:pointer;text-align:center;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:.4rem;}
+.delivery-tab:hover,.delivery-tab.selected{border-color:var(--soft-black);background:var(--white);}
+.delivery-tab-icon{font-size:1.6rem;}
+.delivery-tab-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--charcoal);}
+.delivery-tab-note{font-size:.72rem;font-weight:300;color:var(--stone);}
+.delivery-section{display:none;margin-bottom:1.2rem;}
+.delivery-section.visible{display:block;}
+.ongkir-result{background:var(--off-white);border:1px solid var(--linen);padding:.8rem 1rem;margin-top:.6rem;font-size:.82rem;display:none;}
+.ongkir-result.show{display:block;}
+.ongkir-ok{color:var(--accent-green);font-weight:500;}
+.ongkir-warn{color:#d94f4f;}
+.pay-detail-box{background:var(--off-white);border:1px solid var(--linen);padding:1.5rem;margin-bottom:1.2rem;}
+.pay-detail-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--linen);}
+.pay-detail-row:last-child{border-bottom:none;}
+.pd-label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);}
+.pd-val{font-size:.9rem;color:var(--soft-black);}
+.pd-val.big{font-family:var(--font-serif);font-size:1.3rem;font-weight:300;}
+.qr-image-wrap{width:160px;height:160px;margin:1.2rem auto;border:1px solid var(--sand);display:flex;align-items:center;justify-content:center;background:var(--white);padding:8px;}
+.qr-image-wrap img{width:100%;height:100%;object-fit:contain;}
+.qr-label{text-align:center;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;color:var(--stone);text-transform:uppercase;margin-bottom:.3rem;}
+.pay-note{font-size:.78rem;font-weight:300;color:var(--stone);line-height:1.6;margin-bottom:1.2rem;font-style:italic;}
+.btn-wa{width:100%;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;background:#25D366;color:var(--white);padding:1rem;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:opacity .2s;}
+.btn-wa:hover{opacity:.9;}
+.section-divider{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);margin:.6rem 0 .8rem;}
+
+/* MEMBER MODAL */
+.member-modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:2rem;}
+.member-modal-overlay.open{display:flex;}
+.member-modal{background:var(--white);width:100%;max-width:460px;border:1px solid var(--linen);padding:2.8rem;position:relative;animation:slideUp .35s ease;}
+.member-modal-logo{font-family:var(--font-serif);font-size:.9rem;font-style:italic;color:var(--accent-green);margin-bottom:1.8rem;}
+.member-modal-title{font-family:var(--font-serif);font-size:1.7rem;font-weight:300;color:var(--soft-black);margin-bottom:.5rem;line-height:1.2;}
+.member-modal-sub{font-size:.85rem;font-weight:300;color:var(--stone);line-height:1.6;margin-bottom:2rem;}
+.member-modal-error{font-size:.78rem;color:#d94f4f;margin-bottom:.8rem;display:none;font-family:var(--font-mono);}
+.member-modal-error.show{display:block;}
+.member-btn{width:100%;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;background:var(--soft-black);color:var(--white);padding:1rem;border:none;cursor:pointer;transition:background .2s;margin-top:.5rem;}
+.member-btn:hover{background:var(--accent-green);}
+
+/* WELCOME / LOGOUT */
+.welcome-banner{position:fixed;top:0;left:0;right:0;z-index:500;background:var(--accent-green);color:var(--white);padding:0;height:0;overflow:hidden;transition:height .4s ease;display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:1rem;font-style:italic;text-align:center;}
+.welcome-banner.show{height:52px;padding:0 2rem;}
+.welcome-banner-close{position:absolute;right:1.5rem;background:none;border:none;color:var(--white);cursor:pointer;font-size:1rem;opacity:.7;}
+.logout-overlay{position:fixed;inset:0;z-index:450;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:2rem;}
+.logout-overlay.open{display:flex;}
+.logout-box{background:var(--white);border:1px solid var(--linen);padding:2.2rem 2.5rem;max-width:360px;width:100%;animation:slideUp .3s ease;text-align:center;}
+.logout-title{font-family:var(--font-serif);font-size:1.3rem;font-weight:300;font-style:italic;color:var(--soft-black);margin-bottom:.5rem;}
+.logout-sub{font-size:.82rem;color:var(--stone);font-weight:300;line-height:1.6;margin-bottom:1.8rem;}
+.logout-name{font-family:var(--font-serif);font-style:italic;color:var(--accent-green);}
+.logout-actions{display:flex;gap:.8rem;}
+.btn-cancel{flex:1;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--stone);border:1px solid var(--linen);padding:.8rem;cursor:pointer;transition:all .2s;}
+.btn-cancel:hover{border-color:var(--stone);color:var(--soft-black);}
+.btn-confirm-red{flex:1;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:var(--soft-black);color:var(--white);border:none;padding:.8rem;cursor:pointer;transition:background .2s;}
+.btn-confirm-red:hover{background:#d94f4f;}
+
+/* PREV / FAV / THANKYOU */
+.poi-rebuy{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;background:var(--soft-black);color:var(--white);padding:.4rem .9rem;border:none;cursor:pointer;border-radius:2rem;transition:background .2s;}
+.poi-rebuy:hover{background:var(--accent-green);}
+.btn-skip{width:100%;margin-top:1.2rem;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--stone);border:1px solid var(--linen);padding:.8rem;cursor:pointer;transition:all .2s;}
+.btn-skip:hover{border-color:var(--stone);color:var(--soft-black);}
+.fav-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.2rem;}
+.fav-item{background:var(--off-white);border:1px solid var(--linen);padding:1rem;display:flex;flex-direction:column;gap:.4rem;cursor:pointer;transition:all .2s;}
+.fav-item:hover{border-color:var(--accent-green);background:var(--white);}
+.fav-emoji{font-size:1.8rem;}
+.fav-name{font-family:var(--font-serif);font-style:italic;font-size:.88rem;color:var(--soft-black);line-height:1.3;}
+.fav-price{font-family:var(--font-mono);font-size:.6rem;color:var(--accent-green);}
+.fav-badge{display:inline-block;font-family:var(--font-mono);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;background:var(--soft-black);color:var(--white);padding:.15rem .45rem;border-radius:2rem;margin-bottom:.2rem;}
+.thankyou-modal{background:var(--white);width:100%;max-width:480px;border:1px solid var(--linen);padding:3rem 2.8rem;text-align:center;animation:slideUp .4s cubic-bezier(.22,.68,0,1.2);}
+.thankyou-confetti{font-size:3rem;margin-bottom:1.2rem;display:block;}
+.thankyou-title{font-family:var(--font-serif);font-size:2rem;font-weight:300;font-style:italic;color:var(--soft-black);margin-bottom:.6rem;line-height:1.2;}
+.thankyou-name{color:var(--accent-green);}
+.thankyou-sub{font-size:.88rem;font-weight:300;color:var(--stone);line-height:1.7;margin-bottom:1.8rem;}
+.thankyou-recap{background:var(--off-white);border:1px solid var(--linen);padding:1.2rem 1.5rem;margin-bottom:1.8rem;text-align:left;}
+.thankyou-recap-row{display:flex;justify-content:space-between;font-size:.82rem;font-weight:300;color:var(--charcoal);padding:.3rem 0;border-bottom:1px solid var(--linen);}
+.thankyou-recap-row:last-child{border-bottom:none;}
+.thankyou-recap-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:.8rem;padding-top:.8rem;border-top:2px solid var(--linen);}
+.thankyou-total-label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);}
+.thankyou-total-val{font-family:var(--font-serif);font-size:1.4rem;font-weight:300;color:var(--soft-black);}
+.thankyou-btn{width:100%;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;background:var(--accent-green);color:var(--white);padding:1rem;border:none;cursor:pointer;}
+
+/* LOADING */
+.member-loading{display:none;align-items:center;justify-content:center;gap:.6rem;padding:.8rem 0;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);}
+.member-loading.show{display:flex;}
+.spinner{width:16px;height:16px;border:2px solid var(--linen);border-top-color:var(--accent-green);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{display:none;}
+  .hero{padding:7rem 1.5rem 4rem;flex-direction:column;}
+  .hero-right{position:static;transform:none;margin-top:2rem;}
+  .menu,.testimony,.contact,.rebus-section,.about,.subscription-section{padding:4rem 1.5rem;}
+  .about{grid-template-columns:1fr;gap:2rem;}
+  .rebus-inner{grid-template-columns:1fr;gap:2rem;}
+  .contact{grid-template-columns:1fr;gap:2rem;}
+  .menu-header{flex-direction:column;align-items:flex-start;}
+  .cart-panel{width:100%;}
+  footer{padding:2rem 1.5rem;flex-direction:column;text-align:center;}
+  .sub-packages{grid-template-columns:1fr;}
+}
+</style>
+
+<!-- INFO BANNER -->
+<div class="info-banner" id="infoBanner">
+  <div class="info-banner-inner">
+    <div class="info-slides" id="infoSlides">
+      <div class="info-slide active">
+        🛒 <strong>Cara Order:</strong>
+        <span class="sdot">·</span> Pilih Menu
+        <span class="sdot">→</span> Nama & Nomor
+        <span class="sdot">→</span> Pick Up / Delivery
+        <span class="sdot">→</span> Bayar QRIS
+        <span class="sdot">→</span> Kirim Bukti WA
+      </div>
+      <div class="info-slide">
+        🌿 <strong>Subscribe your freshness!</strong>
+        <span class="sdot">·</span> 7 Cold Press + 7 One Shot, dikirim tiap Sabtu
+        <span class="sdot">·</span> <strong>Rp 120.000/minggu · Bebas ongkir</strong>
+      </div>
+      <div class="info-slide">
+        🛵 Ongkir flat <strong>Rp 8.000</strong> untuk &lt;5 km
+        <span class="sdot">·</span> <strong>Rp 14.000</strong> untuk 5–8 km
+        <span class="sdot">·</span> Di atas 8 km: pick up store aja ya!
+      </div>
+      <div class="info-slide">
+        📱 Pembayaran via <strong>QRIS</strong>
+        <span class="sdot">·</span> Scan, bayar, kirim bukti ke WhatsApp
+        <span class="sdot">·</span> Pesanan langsung diproses!
+      </div>
+    </div>
+    <div class="info-banner-nav" id="infoDots"></div>
+    <button class="info-banner-close" onclick="closeBanner()">✕</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Jus<span>(t)</span> your friend cooking</a>
+  <ul class="nav-links">
+    <li><a href="#menu" id="nav-order">Order</a></li>
+    <li><a href="#menu" id="nav-menu">Menu</a></li>
+    <li><a href="#tentang" id="nav-about">About Us</a></li>
+    <li><a href="#testimony" id="nav-testimony">Testimony</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('id')">ID</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="nav-member-pill" id="navMemberPill" onclick="openLogoutModal()">
+      <span class="nav-member-dot"></span>
+      <span class="nav-member-name" id="navMemberName"></span>
+      <span class="nav-member-change" id="nav-change">· ganti</span>
+    </button>
+    <button class="nav-cart-btn" onclick="openCart()">
+      <span id="nav-cart-label">Keranjang</span>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- WELCOME BANNER -->
+<div class="welcome-banner" id="welcomeBanner">
+  <span id="welcomeMsg"></span>
+  <button class="welcome-banner-close" onclick="dismissWelcome()">✕</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle hero-bg-1"></div>
+  <div class="hero-bg-circle hero-bg-2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">🌿 Fresh · Fruit-based · Bandung</div>
+    <h1 class="hero-title">
+      <span class="paren">Jus(t)</span><br>your friend<br><em>cooking</em>
+    </h1>
+    <p class="hero-sub" id="hero-sub">Minuman dan kudapan buah yang jujur — dibuat dengan tangan, dari buah yang baik, buat kamu yang mau hidup lebih segar.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn-primary" id="hero-cta1">Pesan Sekarang</a>
+      <a href="#tentang" class="btn-ghost" id="hero-cta2">Cerita Kami</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="fruit-pill"><span class="fruit-emoji">🍊</span> Jeruk</div>
+    <div class="fruit-pill"><span class="fruit-emoji">🍉</span> Semangka</div>
+    <div class="fruit-pill"><span class="fruit-emoji">🍈</span> Melon</div>
+    <div class="fruit-pill"><span class="fruit-emoji">🫐</span> Bit</div>
+    <div class="fruit-pill"><span class="fruit-emoji">🥭</span> Mangga</div>
+    <div class="fruit-pill"><span class="fruit-emoji">🥑</span> Alpukat</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Jus Segar <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Smoothies <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Cold Press <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Sorbet <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Dessert Yogurt <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Pet Snacks <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Subscribe your freshness <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Jus Segar <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Smoothies <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Cold Press <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Sorbet <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Dessert Yogurt <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Pet Snacks <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Subscribe your freshness <span class="marquee-dot">·</span></span>
+  </div>
+</div>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+  <div class="menu-header fade-up">
+    <div>
+      <div class="section-tag" id="menu-tag">Pesan Sekarang</div>
+      <h2 class="section-title">Menu <em id="menu-em">Pilihan</em></h2>
+    </div>
+    <div class="filter-row" id="catFilters">
+      <button class="filter-btn active" onclick="filterCat('semua',this)" id="f-all">Semua</button>
+      <button class="filter-btn" onclick="filterCat('jus',this)" id="f-jus">Jus & Cold Press</button>
+      <button class="filter-btn" onclick="filterCat('smoothie',this)" id="f-smoothie">Smoothies</button>
+      <button class="filter-btn" onclick="filterCat('dessert',this)" id="f-dessert">Dessert</button>
+      <button class="filter-btn" onclick="filterCat('petsnack',this)" id="f-pet">Pet Snacks</button>
+    </div>
+  </div>
+  <div class="fruit-tabs-wrap" id="fruitTabsWrap">
+    <div class="fruit-tabs" id="fruitTabs"></div>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<!-- SUBSCRIPTION -->
+<section class="subscription-section" id="subscribe">
+  <div class="sub-header fade-up">
+    <div class="sub-tag" id="sub-tag">Subscribe your freshness</div>
+    <h2 class="sub-title"><em id="sub-em">Langganan</em> <span id="sub-rest">Mingguan</span></h2>
+    <p class="sub-desc" id="sub-desc">7 Cold Press + 7 One Shot pilihan kamu, dikirim setiap Sabtu langsung ke depan pintu. Gratis ongkir, bisa dikustomisasi sesuai selera.</p>
+  </div>
+  <div class="sub-packages fade-up">
+    <div class="sub-card" onclick="openSubModal('detox',this)">
+      <div class="sub-card-icon">🌿</div>
+      <div class="sub-card-name" id="pkg1-name">Detox Package</div>
+      <div class="sub-card-tagline" id="pkg1-tag">Reset. Refresh. Restart.</div>
+      <ul class="sub-card-items">
+        <li id="pkg1-i1">3x Cold Press Bit + Jahe</li>
+        <li id="pkg1-i2">2x Cold Press Semangka Mint</li>
+        <li id="pkg1-i3">2x Cold Press Nanas Kunyit</li>
+        <li id="pkg1-i4">3x Ginger Shot</li>
+        <li id="pkg1-i5">2x Turmeric Shot</li>
+        <li id="pkg1-i6">2x Lemon Cayenne Shot</li>
+      </ul>
+      <div class="sub-card-price">Rp 120.000</div>
+      <div class="sub-card-price-note" id="sub-price-note">/ minggu · bebas ongkir</div>
+      <button class="sub-select-btn" id="sub-btn-label">Pilih Paket Ini</button>
+    </div>
+    <div class="sub-card" onclick="openSubModal('brightening',this)">
+      <div class="sub-card-badge" id="pkg-popular">Terpopuler</div>
+      <div class="sub-card-icon">✨</div>
+      <div class="sub-card-name" id="pkg2-name">Brightening Package</div>
+      <div class="sub-card-tagline" id="pkg2-tag">Glow from the inside out.</div>
+      <ul class="sub-card-items">
+        <li id="pkg2-i1">3x Cold Press Jeruk + Wortel</li>
+        <li id="pkg2-i2">2x Cold Press Mangga Lemon</li>
+        <li id="pkg2-i3">2x Cold Press Naga Merah</li>
+        <li id="pkg2-i4">3x Vitamin C Shot</li>
+        <li id="pkg2-i5">2x Rosehip Shot</li>
+        <li id="pkg2-i6">2x Lemon Ginger Shot</li>
+      </ul>
+      <div class="sub-card-price">Rp 120.000</div>
+      <div class="sub-card-price-note">/ minggu · bebas ongkir</div>
+      <button class="sub-select-btn">Pilih Paket Ini</button>
+    </div>
+    <div class="sub-card" onclick="openSubModal('oneshot',this)">
+      <div class="sub-card-icon">⚡</div>
+      <div class="sub-card-name" id="pkg3-name">One Shot Package</div>
+      <div class="sub-card-tagline" id="pkg3-tag">Quick boost, daily habit.</div>
+      <ul class="sub-card-items">
+        <li id="pkg3-i1">7x Cold Press — pilih rasa sendiri</li>
+        <li id="pkg3-i2">3x Ginger Shot</li>
+        <li id="pkg3-i3">2x Turmeric Shot</li>
+        <li id="pkg3-i4">2x Chlorophyll Shot</li>
+      </ul>
+      <div class="sub-card-price">Rp 120.000</div>
+      <div class="sub-card-price-note">/ minggu · bebas ongkir</div>
+      <button class="sub-select-btn">Pilih Paket Ini</button>
+    </div>
+  </div>
+  <div class="sub-note fade-up">
+    <span id="sub-note1">Dikirim setiap Sabtu</span>
+    <span id="sub-note2">Bebas ongkir</span>
+    <span id="sub-note3">Kustomisasi rasa</span>
+    <span id="sub-note4">Batalkan kapan saja</span>
+  </div>
+</section>
+
+<!-- REBUS -->
+<section class="rebus-section" id="rebus">
+  <div class="rebus-inner">
+    <div class="rebus-text fade-up">
+      <div class="section-tag" id="rebus-tag">Hangat & Sederhana</div>
+      <h2 class="section-title">Rebus-<em>rebusan</em></h2>
+      <p class="rebus-desc" id="rebus-desc">Karena kadang yang paling enak itu yang paling sederhana. Pilih isian favoritmu, dengan atau tanpa telur.</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <div style="background:var(--white);border:1px solid var(--linen);padding:1rem 1.5rem;text-align:center">
+          <div style="font-family:var(--font-serif);font-size:1.5rem;font-weight:300">Rp 15.000</div>
+          <div style="font-family:var(--font-mono);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);margin-top:.2rem" id="rebus-noegg">Tanpa Telur</div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--linen);padding:1rem 1.5rem;text-align:center">
+          <div style="font-family:var(--font-serif);font-size:1.5rem;font-weight:300">Rp 18.000</div>
+          <div style="font-family:var(--font-mono);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);margin-top:.2rem" id="rebus-egg">Pakai Telur</div>
+        </div>
+      </div>
+    </div>
+    <div class="rebus-grid fade-up" id="rebusGrid"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="tentang">
+  <div class="about-visual fade-up">
+    <div class="about-block ab1"><div class="about-big">52</div></div>
+    <div class="about-block ab2"></div>
+  </div>
+  <div class="about-text-content fade-up">
+    <div class="section-tag" id="about-tag">Tentang Kami</div>
+    <h2 class="section-title about-title" id="about-title">52 Moodbooster,<br>setiap <em>minggu</em></h2>
+    <p class="about-desc" id="about-desc">Kami hadir buat kamu yang mau hidup lebih segar, setiap hari. Semua yang kami buat berbasis buah — jus, smoothies, cold press, dessert, sampai snack buat anjing dan kucing kesayanganmu.</p>
+    <div class="about-52">
+      <div class="about-52-number">52</div>
+      <div class="about-52-items">
+        <div class="about-52-item" id="about-52a">5 hari kerja yang butuh semangat extra</div>
+        <div class="about-52-item" id="about-52b">2 hari weekend yang layak dirayakan</div>
+        <div class="about-52-item" id="about-52c">52 minggu dalam setahun — kami selalu ada</div>
+        <div class="about-52-item" id="about-52d">Teman sehat dan segar yang siap boost mood kamu, kapanpun</div>
+      </div>
+    </div>
+    <div class="about-hours">
+      <div class="hours-label" id="hours-label">Buka Setiap Hari</div>
+      <div class="hours-row"><span id="hours-days">Senin — Minggu</span><span>06.30 – 21.00</span></div>
+      <div class="hours-row"><span id="hours-hol">Termasuk Hari Libur</span><span>06.30 – 21.00</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONY -->
+<section class="testimony" id="testimony">
+  <div class="testimony-header fade-up">
+    <div>
+      <div class="section-tag" id="testi-tag">Dari Kamu</div>
+      <h2 class="section-title">Kata <em id="testi-em">mereka</em></h2>
+    </div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card fade-up">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Cold press bit-nya jadi favorit aku tiap pagi. Rasanya earthy tapi enak banget, nggak terlalu manis. Berasa sehat beneran!"</p>
+      <div class="testi-author">A.R. · Pelanggan Setia</div>
+    </div>
+    <div class="testi-card fade-up">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Pet snack-nya dimakan habis sama Mochi dalam hitungan detik. Seneng banget ada yang jual snack buah buat kucing."</p>
+      <div class="testi-author">D.P. · Cat Parent</div>
+    </div>
+    <div class="testi-card fade-up">
+      <div class="testi-stars">★★★★☆</div>
+      <p class="testi-text">"Dessert yogurt mangganya enak parah. Tempatnya juga nyaman, cocok buat nemenin kerja atau santai sore."</p>
+      <div class="testi-author">S.W. · Bandung</div>
+    </div>
+  </div>
+  <div class="testimony-form-wrap fade-up" style="margin-top:3rem">
+    <div class="form-title" id="testi-form-title">Bagikan pengalamanmu 🌿</div>
+    <p class="form-subtitle" id="testi-form-sub">Tuliskan apa yang kamu rasakan. Setelah kami review, testimoni kamu akan tampil di sini.</p>
+    <div class="form-group">
+      <label class="form-label" id="lbl-name">Nama</label>
+      <input class="form-input" type="text" id="testiName" placeholder="Nama kamu">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-wa">No. WhatsApp</label>
+      <input class="form-input" type="tel" id="testiPhone" placeholder="08xx-xxxx-xxxx">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-rating">Rating</label>
+      <div class="form-stars">
+        <button class="star-btn" onclick="setRating(1)">★</button>
+        <button class="star-btn" onclick="setRating(2)">★</button>
+        <button class="star-btn" onclick="setRating(3)">★</button>
+        <button class="star-btn" onclick="setRating(4)">★</button>
+        <button class="star-btn" onclick="setRating(5)">★</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-story">Ceritamu</label>
+      <textarea class="form-textarea" id="testiMsg" placeholder="Ceritain pengalamanmu..."></textarea>
+    </div>
+    <div class="privacy-row">
+      <input type="checkbox" class="privacy-checkbox" id="hidePrivacy" checked>
+      <label class="privacy-label" for="hidePrivacy" id="lbl-privacy">
+        <strong>Sembunyikan nama lengkap & nomor HP saya.</strong><br>Hanya inisial yang tampil di publik.
+      </label>
+    </div>
+    <button class="btn-primary" onclick="submitTestimony()" id="testi-submit-btn">Kirim Testimoni</button>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="kontak">
+  <div class="fade-up">
+    <div class="section-tag" id="contact-tag">Kunjungi Kami</div>
+    <h2 class="section-title" style="margin-bottom:1.5rem">Mampir <em id="contact-em">yuk</em></h2>
+    <div class="contact-info">
+      <div class="contact-row"><div class="contact-icon">📍</div><div><div class="c-label" id="c-addr">Alamat</div><div class="c-val">Jl. Sumber Mekar No. 52, Bandung</div></div></div>
+      <div class="contact-row"><div class="contact-icon">📱</div><div><div class="c-label">WhatsApp</div><div class="c-val">0878-2313-5414</div></div></div>
+      <div class="contact-row"><div class="contact-icon">✉️</div><div><div class="c-label" id="c-email">Pre-order & Pertanyaan</div><div class="c-val">preorder@justyourfriendcooking.com</div></div></div>
+      <div class="contact-row"><div class="contact-icon">📸</div><div><div class="c-label">Instagram</div><div class="c-val">@justyourfriendcooking</div></div></div>
+      <div class="contact-row"><div class="contact-icon">🕐</div><div><div class="c-label" id="c-hours">Jam Buka</div><div class="c-val" id="c-hours-val">Setiap hari · 06.30 – 21.00</div></div></div>
+    </div>
+  </div>
+  <div class="fade-up" style="display:flex;flex-direction:column;justify-content:center">
+    <div style="background:var(--off-white);border:1px solid var(--linen);padding:2.5rem;text-align:center">
+      <div style="font-size:3rem;margin-bottom:1rem">🌿</div>
+      <div style="font-family:var(--font-serif);font-size:1.5rem;font-weight:300;font-style:italic;margin-bottom:.5rem" id="preorder-title">Mau pre-order?</div>
+      <p style="font-size:.85rem;font-weight:300;color:var(--stone);line-height:1.7;margin-bottom:1.5rem" id="preorder-desc">Chat WhatsApp kami untuk pre-order, acara, atau hampers.</p>
+      <a href="https://wa.me/6287823135414" class="btn-primary" style="display:inline-block" id="preorder-btn">Chat WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Jus<span>(t)</span> your friend cooking</div>
+  <div class="footer-copy">© 2025 · Bandung · All rights reserved</div>
+  <div class="footer-links">
+    <a href="#">Instagram</a><a href="#">GoFood</a><a href="#">GrabFood</a>
+  </div>
+</footer>
+
+<!-- MEMBER MODAL -->
+<div class="member-modal-overlay" id="memberModalOverlay">
+  <div class="member-modal">
+    <div class="member-modal-logo">Jus(t) your friend cooking 🌿</div>
+    <div class="member-modal-title" id="member-title">Halo, siapa kamu?</div>
+    <p class="member-modal-sub" id="member-sub">Masukkan nama dan nomor HP dulu ya, biar pesananmu bisa kami proses dengan baik!</p>
+    <div class="member-modal-error" id="memberModalError">Mohon isi nama dan nomor HP yang valid.</div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-mname">Nama</label>
+      <input class="form-input" type="text" id="memberName" oninput="clearMemberError()">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-mphone">Nomor HP</label>
+      <input class="form-input" type="tel" id="memberPhone" placeholder="08xxxxxxxxxx" oninput="clearMemberError()">
+    </div>
+    <div class="member-loading" id="memberLoading"><div class="spinner"></div> <span id="member-checking">Mengecek data member...</span></div>
+    <button class="member-btn" id="memberSubmitBtn" onclick="submitMember()">Yuk, mulai pesan! →</button>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-overlay" id="logoutOverlay">
+  <div class="logout-box">
+    <div class="logout-title" id="logout-title">Ganti akun?</div>
+    <p class="logout-sub">Kamu login sebagai <span class="logout-name" id="logoutName"></span>.<br><span id="logout-sub">Keranjang akan dikosongkan kalau kamu ganti akun.</span></p>
+    <div class="logout-actions" style="margin-top:1.8rem">
+      <button class="btn-cancel" onclick="closeLogoutModal()" id="btn-cancel">Batal</button>
+      <button class="btn-confirm-red" onclick="confirmLogout()" id="btn-logout">Ganti Akun</button>
+    </div>
+  </div>
+</div>
+
+<!-- PREV ORDER MODAL -->
+<div class="modal-overlay" id="prevOrderOverlay">
+  <div class="modal-box" style="max-width:500px">
+    <button class="modal-close" onclick="closePrevOrder()">✕</button>
+    <div class="modal-title" id="prevOrderTitle"></div>
+    <p class="modal-sub" id="prev-sub">Mau pesan yang sama lagi? Tinggal klik!</p>
+    <div id="prevOrderDate" style="font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);margin-bottom:1.2rem"></div>
+    <div id="prevOrderList"></div>
+    <button class="btn-skip" onclick="closePrevOrder()" id="prev-skip">Nggak, mau lihat menu dulu →</button>
+  </div>
+</div>
+
+<!-- FAV MODAL -->
+<div class="modal-overlay" id="favModalOverlay">
+  <div class="modal-box" style="max-width:500px">
+    <button class="modal-close" onclick="closeFavModal()">✕</button>
+    <div class="modal-title" id="fav-title">Yang lagi favorit 🌿</div>
+    <p class="modal-sub" id="fav-sub">Ini yang paling banyak dipesan. Langsung tambah ke keranjang!</p>
+    <div class="fav-grid" id="favGrid"></div>
+    <button class="btn-skip" onclick="closeFavModal()" id="fav-skip">Lihat semua menu →</button>
+  </div>
+</div>
+
+<!-- SUBSCRIPTION MODAL -->
+<div class="modal-overlay" id="subModalOverlay">
+  <div class="modal-box" style="max-width:520px">
+    <button class="modal-close" onclick="closeSubModal()">✕</button>
+    <div class="modal-title" id="sub-modal-title">Pesan Langganan</div>
+    <div id="subModalPkgName" style="font-family:var(--font-mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent-green);margin-bottom:1.8rem"></div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-sname">Nama</label>
+      <input class="form-input" type="text" id="subName">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-sphone">Nomor HP</label>
+      <input class="form-input" type="tel" id="subPhone" placeholder="08xxxxxxxxxx">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-saddr">Alamat Pengiriman</label>
+      <textarea class="form-input" id="subAddress" rows="2" placeholder="Alamat lengkap..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-skel">Kelurahan</label>
+      <input class="form-input" type="text" id="subKelurahan" placeholder="Nama kelurahan kamu">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="lbl-snotes">Catatan / Kustomisasi Rasa</label>
+      <textarea class="form-input" id="subNotes" rows="2" placeholder="Misal: ganti Bit dengan Nanas, dll."></textarea>
+    </div>
+    <p style="font-size:.78rem;color:var(--stone);font-weight:300;line-height:1.6;margin-bottom:1.2rem;font-style:italic" id="sub-modal-note">Setelah konfirmasi, kami akan hubungi kamu via WhatsApp untuk detail pembayaran dan jadwal pengiriman.</p>
+    <button class="btn-wa" onclick="submitSubOrder()">📲 <span id="sub-modal-submit">Konfirmasi via WhatsApp</span></button>
+  </div>
+</div>
+
+<!-- CART PANEL -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <h2 class="cart-head-title" id="cart-title">Keranjang</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items-list" id="cartItemsList"></div>
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-label" id="cart-total-lbl">Total</span>
+      <span class="cart-total-val" id="cartTotalVal">Rp 0</span>
+    </div>
+    <button class="btn-pay" onclick="openPayModal()" id="cart-checkout-btn">Pilih Cara Bayar →</button>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="payModalOverlay">
+  <div class="modal-box" style="max-width:560px">
+    <button class="modal-close" onclick="closePayModal()">✕</button>
+    <div class="modal-title" id="pay-title">Cara Bayar</div>
+    <p class="modal-sub" id="pay-sub">Pilih metode pengiriman, lalu bayar via QRIS.</p>
+
+    <div class="section-divider" id="pay-delivery-lbl">Metode Pengiriman</div>
+    <div class="delivery-tabs">
+      <button class="delivery-tab" id="tabPickup" onclick="selectDelivery('pickup')">
+        <div class="delivery-tab-icon">🏪</div>
+        <div class="delivery-tab-label" id="pickup-label">Pick Up Store</div>
+        <div class="delivery-tab-note" id="pickup-note">Ambil langsung · gratis</div>
+      </button>
+      <button class="delivery-tab" id="tabDelivery" onclick="selectDelivery('delivery')">
+        <div class="delivery-tab-icon">🛵</div>
+        <div class="delivery-tab-label" id="delivery-label">Delivery</div>
+        <div class="delivery-tab-note" id="delivery-note">Rp 8.000 – 14.000</div>
+      </button>
+    </div>
+
+    <!-- PICKUP -->
+    <div class="delivery-section" id="sectionPickup">
+      <div class="form-group">
+        <label class="form-label" id="lbl-pickup-date">Tanggal Pick Up</label>
+        <input class="form-input" type="date" id="pickupDate">
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="lbl-pname">Nama Pemesan</label>
+        <input class="form-input" type="text" id="payerNamePickup">
+      </div>
+    </div>
+
+    <!-- DELIVERY -->
+    <div class="delivery-section" id="sectionDelivery">
+      <div class="form-group">
+        <label class="form-label" id="lbl-delivery-date">Tanggal Pengiriman</label>
+        <input class="form-input" type="date" id="deliveryDate">
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="lbl-daddr">Alamat Lengkap</label>
+        <textarea class="form-input" id="deliveryAddress" rows="2" placeholder="Jl. Nama Jalan No. X, RT/RW, Kelurahan..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="lbl-dkel">Kelurahan / Kecamatan</label>
+        <select class="form-select" id="deliveryKelurahan" onchange="hitungOngkir()">
+          <option value="">-- Pilih kelurahan --</option>
+          <optgroup label="Zona A — kurang dari 5 km (Rp 8.000)">
+            <option value="A">Sarijadi</option>
+            <option value="A">Sukajadi</option>
+            <option value="A">Pasteur</option>
+            <option value="A">Cipedes</option>
+            <option value="A">Sukarasa</option>
+            <option value="A">Gegerkalong</option>
+            <option value="A">Isola</option>
+            <option value="A">Ledeng</option>
+            <option value="A">Hegarmanah</option>
+            <option value="A">Cidadap</option>
+          </optgroup>
+          <optgroup label="Zona B — 5 sampai 8 km (Rp 14.000)">
+            <option value="B">Coblong</option>
+            <option value="B">Dago</option>
+            <option value="B">Lebak Gede</option>
+            <option value="B">Sadang Serang</option>
+            <option value="B">Sekeloa</option>
+            <option value="B">Antapani</option>
+            <option value="B">Cicadas</option>
+            <option value="B">Padasuka</option>
+            <option value="B">Ciumbuleuit</option>
+            <option value="B">Sukahaji</option>
+            <option value="B">Arjuna</option>
+            <option value="B">Pajajaran</option>
+          </optgroup>
+          <optgroup label="Di luar jangkauan — lebih dari 8 km">
+            <option value="X">Cimahi</option>
+            <option value="X">Lembang</option>
+            <option value="X">Soreang</option>
+            <option value="X">Majalaya</option>
+            <option value="X">Baleendah</option>
+            <option value="X">Bojongsoang</option>
+            <option value="X">Lainnya / tidak ada di list</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="ongkir-result" id="ongkirResult"></div>
+      <div class="form-group" style="margin-top:.8rem">
+        <label class="form-label" id="lbl-dname">Nama Pemesan</label>
+        <input class="form-input" type="text" id="payerNameDelivery">
+      </div>
+    </div>
+
+    <!-- QRIS -->
+    <div id="qrisSection" style="display:none;margin-top:1rem">
+      <div class="section-divider" id="pay-method-lbl">Pembayaran via QRIS</div>
+      <div class="pay-detail-box">
+        <div class="qr-label" id="qr-label">Scan untuk bayar via QRIS</div>
+        <div class="qr-image-wrap">
+          <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="50" height="50" fill="none" stroke="#1A1A1A" stroke-width="5"/>
+            <rect x="18" y="18" width="34" height="34" fill="#1A1A1A"/>
+            <rect x="100" y="10" width="50" height="50" fill="none" stroke="#1A1A1A" stroke-width="5"/>
+            <rect x="108" y="18" width="34" height="34" fill="#1A1A1A"/>
+            <rect x="10" y="100" width="50" height="50" fill="none" stroke="#1A1A1A" stroke-width="5"/>
+            <rect x="18" y="108" width="34" height="34" fill="#1A1A1A"/>
+            <rect x="68" y="10" width="8" height="8" fill="#1A1A1A"/><rect x="80" y="10" width="8" height="8" fill="#1A1A1A"/>
+            <rect x="68" y="22" width="8" height="8" fill="#1A1A1A"/><rect x="80" y="26" width="8" height="8" fill="#1A1A1A"/>
+            <rect x="68" y="68" width="8" height="8" fill="#1A1A1A"/><rect x="80" y="70" width="8" height="8" fill="#1A1A1A"/>
+            <rect x="68" y="82" width="8" height="8" fill="#7A9B76"/><rect x="80" y="84" width="8" height="8" fill="#7A9B76"/>
+            <text x="80" y="156" text-anchor="middle" font-family="monospace" font-size="8" fill="#A8A09A" letter-spacing="1">QRIS</text>
+          </svg>
+        </div>
+        <div class="pay-detail-row">
+          <span class="pd-label" id="qr-merchant">Nama Merchant</span>
+          <span class="pd-val">Jus(t) Your Friend Cooking</span>
+        </div>
+        <div class="pay-detail-row" id="ongkirRow" style="display:none">
+          <span class="pd-label" id="qr-ongkir">Ongkos Kirim</span>
+          <span class="pd-val" id="ongkirVal">Rp 0</span>
+        </div>
+        <div class="pay-detail-row">
+          <span class="pd-label" id="qr-total">Total Bayar</span>
+          <span class="pd-val big" id="qrisTotal">Rp 0</span>
+        </div>
+      </div>
+      <p class="pay-note" id="qr-note">Scan QR di atas, bayar, lalu kirim bukti ke WhatsApp kami ya!</p>
+      <button class="btn-wa" onclick="goWhatsApp()">📲 <span id="btn-wa-label">Kirim Bukti ke WhatsApp</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- THANK YOU MODAL -->
+<div class="modal-overlay" id="thankyouOverlay">
+  <div class="thankyou-modal">
+    <span class="thankyou-confetti">🌿</span>
+    <div class="thankyou-title">Makasih, <span class="thankyou-name" id="thankyouName"></span>!</div>
+    <p class="thankyou-sub" id="thankyou-sub">Pesananmu sudah kami terima. Begitu bukti pembayaran masuk, langsung kami proses ya!</p>
+    <div class="thankyou-recap" id="thankyouRecap"></div>
+    <button class="thankyou-btn" onclick="closeThankyou()" id="thankyou-btn">Kembali ke menu 🌿</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVebNevmmAJPfmw3AwvUmm1Vt_heTuJ37tpFtBGZfwmSxSH9DmYGmwyHKs-JVAK0-S/exec';
+
+// ══════════════════════════════════════════
+// I18N
+// ══════════════════════════════════════════
+const T = {
+  id: {
+    'nav-order':'Order','nav-menu':'Menu','nav-about':'Tentang','nav-testimony':'Testimoni',
+    'nav-change':'· ganti','nav-cart-label':'Keranjang',
+    'hero-sub':'Minuman dan kudapan buah yang jujur — dibuat dengan tangan, dari buah yang baik, buat kamu yang mau hidup lebih segar.',
+    'hero-cta1':'Pesan Sekarang','hero-cta2':'Cerita Kami',
+    'menu-tag':'Pesan Sekarang','menu-em':'Pilihan',
+    'f-all':'Semua','f-jus':'Jus & Cold Press','f-smoothie':'Smoothies','f-dessert':'Dessert','f-pet':'Pet Snacks',
+    'sub-tag':'Subscribe your freshness','sub-em':'Langganan','sub-rest':'Mingguan',
+    'sub-desc':'7 Cold Press + 7 One Shot pilihan kamu, dikirim setiap Sabtu langsung ke depan pintu. Gratis ongkir, bisa dikustomisasi sesuai selera.',
+    'pkg1-name':'Detox Package','pkg1-tag':'Reset. Refresh. Restart.',
+    'pkg1-i1':'3x Cold Press Bit + Jahe','pkg1-i2':'2x Cold Press Semangka Mint','pkg1-i3':'2x Cold Press Nanas Kunyit',
+    'pkg1-i4':'3x Ginger Shot','pkg1-i5':'2x Turmeric Shot','pkg1-i6':'2x Lemon Cayenne Shot',
+    'pkg2-name':'Brightening Package','pkg2-tag':'Glow from the inside out.',
+    'pkg2-i1':'3x Cold Press Jeruk + Wortel','pkg2-i2':'2x Cold Press Mangga Lemon','pkg2-i3':'2x Cold Press Naga Merah',
+    'pkg2-i4':'3x Vitamin C Shot','pkg2-i5':'2x Rosehip Shot','pkg2-i6':'2x Lemon Ginger Shot',
+    'pkg3-name':'One Shot Package','pkg3-tag':'Quick boost, daily habit.',
+    'pkg3-i1':'7x Cold Press — pilih rasa sendiri','pkg3-i2':'3x Ginger Shot','pkg3-i3':'2x Turmeric Shot','pkg3-i4':'2x Chlorophyll Shot',
+    'pkg-popular':'Terpopuler','sub-price-note':'/ minggu · bebas ongkir','sub-btn-label':'Pilih Paket Ini',
+    'sub-note1':'Dikirim setiap Sabtu','sub-note2':'Bebas ongkir','sub-note3':'Kustomisasi rasa','sub-note4':'Batalkan kapan saja',
+    'rebus-tag':'Hangat & Sederhana','rebus-desc':'Karena kadang yang paling enak itu yang paling sederhana. Pilih isian favoritmu, dengan atau tanpa telur.',
+    'rebus-noegg':'Tanpa Telur','rebus-egg':'Pakai Telur',
+    'about-tag':'Tentang Kami','about-title':'52 Moodbooster,<br>setiap <em>minggu</em>',
+    'about-desc':'Kami hadir buat kamu yang mau hidup lebih segar, setiap hari. Semua yang kami buat berbasis buah — jus, smoothies, cold press, dessert, sampai snack buat anjing dan kucing kesayanganmu.',
+    'about-52a':'5 hari kerja yang butuh semangat extra','about-52b':'2 hari weekend yang layak dirayakan',
+    'about-52c':'52 minggu dalam setahun — kami selalu ada','about-52d':'Teman sehat dan segar yang siap boost mood kamu, kapanpun',
+    'hours-label':'Buka Setiap Hari','hours-days':'Senin — Minggu','hours-hol':'Termasuk Hari Libur',
+    'testi-tag':'Dari Kamu','testi-em':'mereka',
+    'testi-form-title':'Bagikan pengalamanmu 🌿','testi-form-sub':'Tuliskan apa yang kamu rasakan. Setelah kami review, testimoni kamu akan tampil di sini.',
+    'lbl-name':'Nama','lbl-wa':'No. WhatsApp','lbl-rating':'Rating','lbl-story':'Ceritamu',
+    'lbl-privacy':'<strong>Sembunyikan nama lengkap & nomor HP saya.</strong><br>Hanya inisial yang tampil di publik.',
+    'testi-submit-btn':'Kirim Testimoni',
+    'contact-tag':'Kunjungi Kami','contact-em':'yuk','c-addr':'Alamat','c-email':'Pre-order & Pertanyaan','c-hours':'Jam Buka','c-hours-val':'Setiap hari · 06.30 – 21.00',
+    'preorder-title':'Mau pre-order?','preorder-desc':'Chat WhatsApp kami untuk pre-order, acara, atau hampers.','preorder-btn':'Chat WhatsApp',
+    'member-title':'Halo, siapa kamu?','member-sub':'Masukkan nama dan nomor HP dulu ya, biar pesananmu bisa kami proses dengan baik!',
+    'lbl-mname':'Nama','lbl-mphone':'Nomor HP','member-checking':'Mengecek data member...',
+    'logout-title':'Ganti akun?','logout-sub':'Keranjang akan dikosongkan kalau kamu ganti akun.',
+    'btn-cancel':'Batal','btn-logout':'Ganti Akun',
+    'prev-sub':'Mau pesan yang sama lagi? Tinggal klik!','prev-skip':'Nggak, mau lihat menu dulu →',
+    'fav-title':'Yang lagi favorit 🌿','fav-sub':'Ini yang paling banyak dipesan. Langsung tambah ke keranjang!','fav-skip':'Lihat semua menu →',
+    'cart-title':'Keranjang','cart-total-lbl':'Total','cart-checkout-btn':'Pilih Cara Bayar →',
+    'pay-title':'Cara Bayar','pay-sub':'Pilih metode pengiriman, lalu bayar via QRIS.',
+    'pay-delivery-lbl':'Metode Pengiriman','pickup-label':'Pick Up Store','pickup-note':'Ambil langsung · gratis',
+    'delivery-label':'Delivery','delivery-note':'Rp 8.000 – 14.000',
+    'lbl-pickup-date':'Tanggal Pick Up','lbl-pname':'Nama Pemesan',
+    'lbl-delivery-date':'Tanggal Pengiriman','lbl-daddr':'Alamat Lengkap','lbl-dkel':'Kelurahan / Kecamatan','lbl-dname':'Nama Pemesan',
+    'pay-method-lbl':'Pembayaran via QRIS','qr-label':'Scan untuk bayar via QRIS',
+    'qr-merchant':'Nama Merchant','qr-ongkir':'Ongkos Kirim','qr-total':'Total Bayar',
+    'qr-note':'Scan QR di atas, bayar, lalu kirim bukti ke WhatsApp kami ya!','btn-wa-label':'Kirim Bukti ke WhatsApp',
+    'sub-modal-title':'Pesan Langganan','lbl-sname':'Nama','lbl-sphone':'Nomor HP',
+    'lbl-saddr':'Alamat Pengiriman','lbl-skel':'Kelurahan','lbl-snotes':'Catatan / Kustomisasi Rasa',
+    'sub-modal-note':'Setelah konfirmasi, kami akan hubungi kamu via WhatsApp untuk detail pembayaran dan jadwal pengiriman.',
+    'sub-modal-submit':'Konfirmasi via WhatsApp',
+    'thankyou-sub':'Pesananmu sudah kami terima. Begitu bukti pembayaran masuk, langsung kami proses ya!',
+    'thankyou-btn':'Kembali ke menu 🌿',
+  },
+  en: {
+    'nav-order':'Order','nav-menu':'Menu','nav-about':'About Us','nav-testimony':'Testimony',
+    'nav-change':'· change','nav-cart-label':'Cart',
+    'hero-sub':'Honest fruit-based drinks & bites — made by hand, from good fruit, for those who want to live fresher.',
+    'hero-cta1':'Order Now','hero-cta2':'Our Story',
+    'menu-tag':'Order Now','menu-em':'Selection',
+    'f-all':'All','f-jus':'Juice & Cold Press','f-smoothie':'Smoothies','f-dessert':'Dessert','f-pet':'Pet Snacks',
+    'sub-tag':'Subscribe your freshness','sub-em':'Weekly','sub-rest':'Subscription',
+    'sub-desc':'7 Cold Press + 7 One Shot of your choice, delivered every Saturday right to your door. Free delivery, fully customizable.',
+    'pkg1-name':'Detox Package','pkg1-tag':'Reset. Refresh. Restart.',
+    'pkg1-i1':'3x Beet + Ginger Cold Press','pkg1-i2':'2x Watermelon Mint Cold Press','pkg1-i3':'2x Pineapple Turmeric Cold Press',
+    'pkg1-i4':'3x Ginger Shot','pkg1-i5':'2x Turmeric Shot','pkg1-i6':'2x Lemon Cayenne Shot',
+    'pkg2-name':'Brightening Package','pkg2-tag':'Glow from the inside out.',
+    'pkg2-i1':'3x Carrot Orange Cold Press','pkg2-i2':'2x Mango Lemon Cold Press','pkg2-i3':'2x Dragon Fruit Cold Press',
+    'pkg2-i4':'3x Vitamin C Shot','pkg2-i5':'2x Rosehip Shot','pkg2-i6':'2x Lemon Ginger Shot',
+    'pkg3-name':'One Shot Package','pkg3-tag':'Quick boost, daily habit.',
+    'pkg3-i1':'7x Cold Press — pick your flavors','pkg3-i2':'3x Ginger Shot','pkg3-i3':'2x Turmeric Shot','pkg3-i4':'2x Chlorophyll Shot',
+    'pkg-popular':'Most Popular','sub-price-note':'/ week · free delivery','sub-btn-label':'Choose This Package',
+    'sub-note1':'Delivered every Saturday','sub-note2':'Free delivery','sub-note3':'Customizable flavors','sub-note4':'Cancel anytime',
+    'rebus-tag':'Warm & Simple','rebus-desc':'Because sometimes the most comforting food is the simplest. Pick your favorites, with or without egg.',
+    'rebus-noegg':'Without Egg','rebus-egg':'With Egg',
+    'about-tag':'About Us','about-title':'52 Moodbooster,<br>every <em>week</em>',
+    'about-desc':'We\'re here for those who want to live fresher, every day. Everything we make is fruit-based — juices, smoothies, cold press, desserts, and even snacks for your beloved pets.',
+    'about-52a':'5 weekdays that need a little extra boost','about-52b':'2 weekends worth celebrating',
+    'about-52c':'52 weeks a year — we\'re always here','about-52d':'Your healthy, refreshing friend ready to boost your mood anytime',
+    'hours-label':'Open Every Day','hours-days':'Monday — Sunday','hours-hol':'Including Public Holidays',
+    'testi-tag':'From You','testi-em':'they say',
+    'testi-form-title':'Share your experience 🌿','testi-form-sub':'Tell us how you feel. After our review, your testimony will appear here.',
+    'lbl-name':'Name','lbl-wa':'WhatsApp Number','lbl-rating':'Rating','lbl-story':'Your Story',
+    'lbl-privacy':'<strong>Hide my full name & phone number.</strong><br>Only initials will appear publicly.',
+    'testi-submit-btn':'Submit Testimony',
+    'contact-tag':'Visit Us','contact-em':'drop by','c-addr':'Address','c-email':'Pre-order & Inquiries','c-hours':'Opening Hours','c-hours-val':'Every day · 06.30 – 21.00',
+    'preorder-title':'Want to pre-order?','preorder-desc':'Chat us on WhatsApp for pre-orders, events, or hampers.','preorder-btn':'Chat WhatsApp',
+    'member-title':'Hey, who are you?','member-sub':'Enter your name and phone number so we can process your order!',
+    'lbl-mname':'Name','lbl-mphone':'Phone Number','member-checking':'Checking member data...',
+    'logout-title':'Switch account?','logout-sub':'Your cart will be cleared if you switch accounts.',
+    'btn-cancel':'Cancel','btn-logout':'Switch Account',
+    'prev-sub':'Want to order the same thing again? Just tap!','prev-skip':'No thanks, let me browse the menu →',
+    'fav-title':'Currently trending 🌿','fav-sub':'Most ordered items. Add to cart right away!','fav-skip':'See all menu →',
+    'cart-title':'Cart','cart-total-lbl':'Total','cart-checkout-btn':'Checkout →',
+    'pay-title':'Checkout','pay-sub':'Choose your delivery method, then pay via QRIS.',
+    'pay-delivery-lbl':'Delivery Method','pickup-label':'Pick Up Store','pickup-note':'In-store pickup · free',
+    'delivery-label':'Delivery','delivery-note':'Rp 8,000 – 14,000',
+    'lbl-pickup-date':'Pick Up Date','lbl-pname':'Your Name',
+    'lbl-delivery-date':'Delivery Date','lbl-daddr':'Full Address','lbl-dkel':'Neighborhood','lbl-dname':'Your Name',
+    'pay-method-lbl':'Payment via QRIS','qr-label':'Scan to pay via QRIS',
+    'qr-merchant':'Merchant Name','qr-ongkir':'Delivery Fee','qr-total':'Total Payment',
+    'qr-note':'Scan the QR above, pay, then send proof to our WhatsApp!','btn-wa-label':'Send Payment Proof via WhatsApp',
+    'sub-modal-title':'Subscribe','lbl-sname':'Name','lbl-sphone':'Phone Number',
+    'lbl-saddr':'Delivery Address','lbl-skel':'Neighborhood','lbl-snotes':'Notes / Flavor Customization',
+    'sub-modal-note':'After confirmation, we\'ll reach out via WhatsApp for payment details and delivery schedule.',
+    'sub-modal-submit':'Confirm via WhatsApp',
+    'thankyou-sub':'We\'ve received your order. Once we confirm payment, we\'ll get it ready right away!',
+    'thankyou-btn':'Back to menu 🌿',
+  }
+};
+
+let currentLang = 'id';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === lang.toUpperCase()));
+  const d = T[lang];
+  Object.keys(d).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = d[id];
+  });
+  renderProducts();
+  renderRebus();
+}
+
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const fruits = [
+  {id:'jeruk',label:'🍊 Jeruk'},{id:'semangka',label:'🍉 Semangka'},
+  {id:'melon',label:'🍈 Melon'},{id:'bit',label:'🫐 Bit'},
+  {id:'pisang',label:'🍌 Pisang'},{id:'mangga',label:'🥭 Mangga'},
+  {id:'alpukat',label:'🥑 Alpukat'},{id:'naga',label:'🔴 Buah Naga'},
+  {id:'jambu',label:'🍓 Jambu'},
+];
+
+const products = [
+  {id:1,name:{id:'Jus Jeruk Segar',en:'Fresh Orange Juice'},desc:{id:'Perasan jeruk segar tanpa tambahan apa-apa.',en:'Freshly squeezed orange, nothing added.'},price:12000,emoji:'🍊',cat:'jus',fruit:'jeruk',badge:null},
+  {id:2,name:{id:'Cold Press Semangka',en:'Watermelon Cold Press'},desc:{id:'Semangka dingin, cold pressed — manis alami.',en:'Cold pressed watermelon — naturally sweet.'},price:18000,emoji:'🍉',cat:'jus',fruit:'semangka',badge:'Best Seller'},
+  {id:3,name:{id:'Jus Melon Muda',en:'Fresh Melon Juice'},desc:{id:'Melon segar, ringan, menyegarkan.',en:'Light, fresh and refreshing melon juice.'},price:13000,emoji:'🍈',cat:'jus',fruit:'melon',badge:null},
+  {id:4,name:{id:'Cold Press Bit',en:'Beet Cold Press'},desc:{id:'Bit merah, earthy dan kaya nutrisi.',en:'Red beet, earthy and nutrient-rich.'},price:18000,emoji:'🫐',cat:'jus',fruit:'bit',badge:{id:'Favorit',en:'Favorite'}},
+  {id:5,name:{id:'Jus Mangga Harum',en:'Fragrant Mango Juice'},desc:{id:'Mangga matang, harum, dan kental alami.',en:'Ripe mango, fragrant and naturally thick.'},price:15000,emoji:'🥭',cat:'jus',fruit:'mangga',badge:null},
+  {id:6,name:{id:'Cold Press Jambu',en:'Guava Cold Press'},desc:{id:'Jambu biji merah, segar dan kaya vitamin C.',en:'Red guava, fresh and rich in vitamin C.'},price:15000,emoji:'🍓',cat:'jus',fruit:'jambu',badge:null},
+  {id:7,name:{id:'Jus Buah Naga',en:'Dragon Fruit Juice'},desc:{id:'Buah naga merah, warna cantik rasa mantap.',en:'Red dragon fruit — gorgeous color, great taste.'},price:16000,emoji:'🔴',cat:'jus',fruit:'naga',badge:null},
+  {id:8,name:{id:'Smoothie Alpukat',en:'Avocado Smoothie'},desc:{id:'Alpukat creamy blend dengan sedikit madu.',en:'Creamy avocado blend with a touch of honey.'},price:20000,emoji:'🥑',cat:'smoothie',fruit:'alpukat',badge:{id:'Favorit',en:'Favorite'}},
+  {id:9,name:{id:'Smoothie Pisang',en:'Banana Smoothie'},desc:{id:'Pisang, susu oat, dan sedikit kayu manis.',en:'Banana, oat milk, and a pinch of cinnamon.'},price:15000,emoji:'🍌',cat:'smoothie',fruit:'pisang',badge:null},
+  {id:10,name:{id:'Smoothie Mangga Bit',en:'Mango Beet Smoothie'},desc:{id:'Mangga manis + bit merah — warna sunrise.',en:'Sweet mango + red beet — sunrise in a glass.'},price:20000,emoji:'🌅',cat:'smoothie',fruit:'mangga',badge:'New'},
+  {id:11,name:{id:'Smoothie Melon Jeruk',en:'Melon Orange Smoothie'},desc:{id:'Perpaduan melon segar dan jeruk yang cerah.',en:'Bright blend of fresh melon and orange.'},price:18000,emoji:'🍈',cat:'smoothie',fruit:'melon',badge:null},
+  {id:12,name:{id:'Yogurt Mangga',en:'Mango Yogurt'},desc:{id:'Yogurt Greek, topping mangga segar dan granola.',en:'Greek yogurt, fresh mango topping and granola.'},price:20000,emoji:'🥭',cat:'dessert',fruit:'mangga',badge:'Best Seller'},
+  {id:13,name:{id:'Sorbet Semangka',en:'Watermelon Sorbet'},desc:{id:'Sorbet beku semangka — murni buah, tanpa susu.',en:'Frozen watermelon sorbet — pure fruit, dairy-free.'},price:18000,emoji:'🍉',cat:'dessert',fruit:'semangka',badge:null},
+  {id:14,name:{id:'Yogurt Naga',en:'Dragon Fruit Yogurt'},desc:{id:'Yogurt dengan potongan buah naga merah segar.',en:'Yogurt with fresh red dragon fruit pieces.'},price:20000,emoji:'🔴',cat:'dessert',fruit:'naga',badge:null},
+  {id:15,name:{id:'Sorbet Jambu Biji',en:'Guava Sorbet'},desc:{id:'Segar, asam-manis, dan natural banget.',en:'Fresh, tangy-sweet and totally natural.'},price:16000,emoji:'🍓',cat:'dessert',fruit:'jambu',badge:null},
+  {id:16,name:{id:'Pet Snack Semangka',en:'Watermelon Pet Snack'},desc:{id:'Semangka tanpa biji untuk anjing & kucing. Aman dan segar!',en:'Seedless watermelon for dogs & cats. Safe and fresh!'},price:5000,emoji:'🐾',cat:'petsnack',fruit:null,badge:null},
+  {id:17,name:{id:'Pet Snack Mix Buah',en:'Mixed Fruit Pet Snack'},desc:{id:'Campuran buah aman untuk hewan peliharaan.',en:'Pet-safe mixed fruit blend.'},price:5000,emoji:'🐾',cat:'petsnack',fruit:null,badge:'New'},
+];
+
+const rebusItems = [
+  {emoji:'🟣',name:{id:'Ubi Ungu',en:'Purple Sweet Potato'}},
+  {emoji:'🎃',name:{id:'Labu',en:'Pumpkin'}},
+  {emoji:'🍠',name:{id:'Singkong',en:'Cassava'}},
+  {emoji:'🥚',name:{id:'Telur',en:'Egg'}},
+  {emoji:'🌽',name:{id:'Jagung Manis',en:'Sweet Corn'}},
+  {emoji:'🥜',name:{id:'Kacang Tanah',en:'Peanuts'}},
+];
+
+const FAVORITES = [2,4,8,12,10,13];
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let cart={}, currentCat='semua', currentFruit='semua', selectedRating=0;
+let currentMember=null, _pendingCartAction=null, _afterPrevOrder=null;
+let selectedDelivery=null, ongkirAmount=0, selectedSubPkg=null;
+
+// ══════════════════════════════════════════
+// INFO BANNER
+// ══════════════════════════════════════════
+let currentSlide=0, slideTimer=null;
+const SLIDE_COUNT=4;
+
+function initBanner(){
+  const dots=document.getElementById('infoDots');
+  dots.innerHTML='';
+  for(let i=0;i<SLIDE_COUNT;i++){
+    const d=document.createElement('button');
+    d.className='info-dot'+(i===0?' active':'');
+    d.onclick=()=>goSlide(i);
+    dots.appendChild(d);
+  }
+  slideTimer=setInterval(()=>goSlide((currentSlide+1)%SLIDE_COUNT),4500);
+}
+function goSlide(n){
+  document.querySelectorAll('.info-slide').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.info-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+  currentSlide=n;
+}
+function closeBanner(){
+  document.getElementById('infoBanner').style.display='none';
+  clearInterval(slideTimer);
+  document.body.style.paddingBottom='0';
+}
+
+// ══════════════════════════════════════════
+// API
+// ══════════════════════════════════════════
+async function apiCall(payload){
+  const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+  return r.json();
+}
+async function lookupMember(phone){
+  try{return await apiCall({action:'lookupMember',phone:normPhone(phone)});}catch(e){return{found:false};}
+}
+async function registerMember(name,phone){
+  try{await apiCall({action:'registerMember',name,phone:normPhone(phone)});}catch(e){}
+}
+async function saveOrderToSheets(member,items,total,method,dInfo){
+  try{
+    await apiCall({
+      action:'saveOrder',name:member.name,phone:normPhone(member.phone),
+      items:items.map(i=>({name:i.name[currentLang]||i.name.id||i.name,qty:i.qty,price:i.price})),
+      total,method,channel:'online',
+      deliveryType:dInfo.type,deliveryDate:dInfo.date,deliveryAddress:dInfo.address||'',
+      ongkir:ongkirAmount,timestamp:new Date().toISOString()
+    });
+  }catch(e){}
+}
+function normPhone(p){
+  let d=p.replace(/\D/g,'');
+  if(d.startsWith('62'))d='0'+d.slice(2);
+  if(!d.startsWith('0'))d='0'+d;
+  return d;
+}
+
+// ══════════════════════════════════════════
+// DELIVERY & ONGKIR
+// ══════════════════════════════════════════
+function selectDelivery(type){
+  selectedDelivery=type;
+  document.getElementById('tabPickup').classList.toggle('selected',type==='pickup');
+  document.getElementById('tabDelivery').classList.toggle('selected',type==='delivery');
+  document.getElementById('sectionPickup').classList.toggle('visible',type==='pickup');
+  document.getElementById('sectionDelivery').classList.toggle('visible',type==='delivery');
+  document.getElementById('qrisSection').style.display='block';
+  if(type==='pickup'){ongkirAmount=0;document.getElementById('ongkirRow').style.display='none';}
+  updateQrisTotal();
+}
+function hitungOngkir(){
+  const sel=document.getElementById('deliveryKelurahan');
+  const zone=sel.value;
+  const res=document.getElementById('ongkirResult');
+  res.className='ongkir-result show';
+  if(!zone){res.innerHTML='';return;}
+  if(zone==='A'){
+    ongkirAmount=8000;
+    res.innerHTML='<span class="ongkir-ok">✓ Zona A (&lt;5 km) — Ongkir Rp 8.000</span>';
+    document.getElementById('ongkirRow').style.display='flex';
+    document.getElementById('ongkirVal').textContent='Rp 8.000';
+  }else if(zone==='B'){
+    ongkirAmount=14000;
+    res.innerHTML='<span class="ongkir-ok">✓ Zona B (5–8 km) — Ongkir Rp 14.000</span>';
+    document.getElementById('ongkirRow').style.display='flex';
+    document.getElementById('ongkirVal').textContent='Rp 14.000';
+  }else{
+    ongkirAmount=0;
+    res.innerHTML='<span class="ongkir-warn">⚠ Di luar jangkauan (&gt;8 km). Silakan gunakan Pick Up Store ya!</span>';
+    document.getElementById('ongkirRow').style.display='none';
+  }
+  updateQrisTotal();
+}
+function updateQrisTotal(){
+  const sub=Object.values(cart).reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('qrisTotal').textContent='Rp '+(sub+ongkirAmount).toLocaleString('id-ID');
+}
+
+// ══════════════════════════════════════════
+// MEMBER FLOW
+// ══════════════════════════════════════════
+function requireMember(cb){
+  if(currentMember){cb();return;}
+  _pendingCartAction=cb;
+  document.getElementById('memberModalOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('memberName').focus(),100);
+}
+function clearMemberError(){document.getElementById('memberModalError').classList.remove('show');}
+
+async function submitMember(){
+  const name=document.getElementById('memberName').value.trim();
+  const phone=document.getElementById('memberPhone').value.trim();
+  if(!name||phone.replace(/\D/g,'').length<8){document.getElementById('memberModalError').classList.add('show');return;}
+  document.getElementById('memberLoading').classList.add('show');
+  document.getElementById('memberSubmitBtn').disabled=true;
+  document.getElementById('memberSubmitBtn').style.opacity='.5';
+  const result=await lookupMember(phone);
+  document.getElementById('memberLoading').classList.remove('show');
+  document.getElementById('memberSubmitBtn').disabled=false;
+  document.getElementById('memberSubmitBtn').style.opacity='1';
+  currentMember={name,phone,isReturning:result.found,lastOrders:result.lastOrders||[]};
+  document.getElementById('memberModalOverlay').classList.remove('open');
+  if(result.found){
+    currentMember.name=result.name||name;
+    showWelcome(currentLang==='id'?`Selamat datang lagi, ${currentMember.name}! 🌿`:`Welcome back, ${currentMember.name}! 🌿`);
+    showPrevOrders(result);
+  }else{
+    await registerMember(name,phone);
+    showWelcome(currentLang==='id'?`Halo ${name}, senang ketemu kamu 🌿`:`Hey ${name}, great to meet you 🌿`);
+    showFavoritesModal();
+  }
+  document.getElementById('payerNamePickup').value=currentMember.name;
+  document.getElementById('payerNameDelivery').value=currentMember.name;
+  updateMemberPill(currentMember.name);
+  if(_pendingCartAction){const a=_pendingCartAction;_pendingCartAction=null;_afterPrevOrder=a;}
+}
+
+function showWelcome(msg){
+  document.getElementById('welcomeMsg').textContent=msg;
+  document.getElementById('welcomeBanner').classList.add('show');
+  document.getElementById('mainNav').style.top='52px';
+  setTimeout(dismissWelcome,5000);
+}
+function dismissWelcome(){
+  document.getElementById('welcomeBanner').classList.remove('show');
+  document.getElementById('mainNav').style.top='0';
+}
+
+function showPrevOrders(data){
+  const orders=data.lastOrders||[];
+  document.getElementById('prevOrderTitle').textContent=currentLang==='id'?`Halo lagi, ${currentMember.name}! 👋`:`Hey again, ${currentMember.name}! 👋`;
+  const list=document.getElementById('prevOrderList');
+  if(!orders.length){
+    list.innerHTML=`<div style="font-family:var(--font-serif);font-style:italic;color:var(--stone);padding:1rem 0">${currentLang==='id'?'Belum ada riwayat pesanan online.':'No online order history yet.'}</div>`;
+  }else{
+    list.innerHTML=orders.slice(-3).reverse().map((o,idx)=>`
+      <div style="padding:.9rem 0;border-bottom:1px solid var(--linen)">
+        <div style="font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);margin-bottom:.3rem">${String(o.date||'').substring(0,10)}</div>
+        <div style="font-family:var(--font-serif);font-style:italic;font-size:.9rem;color:var(--soft-black);line-height:1.5;margin-bottom:.5rem">${o.items}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          ${o.total?`<div style="font-family:var(--font-mono);font-size:.65rem;color:var(--accent-green)">Rp ${Number(o.total).toLocaleString('id-ID')}</div>`:'<div></div>'}
+          <button class="poi-rebuy" onclick="reorderFromString('${o.items.replace(/'/g,"\\'")}')">+ ${currentLang==='id'?'Pesan Lagi':'Order Again'}</button>
+        </div>
+      </div>`).join('');
+  }
+  document.getElementById('prevOrderOverlay').classList.add('open');
+}
+
+function reorderFromString(str){
+  const parts=str.split(',').map(s=>s.trim());
+  let added=0;
+  parts.forEach(part=>{
+    const m=part.match(/^(.+?)\s*[x×]\s*(\d+)$/i);
+    if(!m)return;
+    const nama=m[1].trim(),qty=parseInt(m[2])||1;
+    const p=products.find(x=>x.name.id.toLowerCase()===nama.toLowerCase()||x.name.en.toLowerCase()===nama.toLowerCase());
+    if(p){if(cart[p.id])cart[p.id].qty+=qty;else cart[p.id]={...p,qty};added++;}
+  });
+  if(added>0){updateCartUI();closePrevOrder();openCart();}
+  else{alert(currentLang==='id'?'Beberapa item tidak tersedia lagi 🌿':'Some items are no longer available 🌿');closePrevOrder();}
+}
+
+function closePrevOrder(){
+  document.getElementById('prevOrderOverlay').classList.remove('open');
+  if(_afterPrevOrder){_afterPrevOrder();_afterPrevOrder=null;}
+}
+
+function showFavoritesModal(){
+  const favs=products.filter(p=>FAVORITES.includes(p.id));
+  document.getElementById('favGrid').innerHTML=favs.map(p=>`
+    <div class="fav-item" onclick="addFavToCart(${p.id})">
+      ${p.badge?`<span class="fav-badge">${typeof p.badge==='object'?p.badge[currentLang]:p.badge}</span>`:''}
+      <div class="fav-emoji">${p.emoji}</div>
+      <div class="fav-name">${p.name[currentLang]}</div>
+      <div class="fav-price">Rp ${p.price.toLocaleString('id-ID')}</div>
+    </div>`).join('');
+  document.getElementById('favModalOverlay').classList.add('open');
+}
+function addFavToCart(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  if(cart[id])cart[id].qty++;else cart[id]={...p,qty:1};
+  updateCartUI();closeFavModal();openCart();
+}
+function closeFavModal(){
+  document.getElementById('favModalOverlay').classList.remove('open');
+  if(_afterPrevOrder){_afterPrevOrder();_afterPrevOrder=null;}
+}
+
+// ══════════════════════════════════════════
+// CART
+// ══════════════════════════════════════════
+function addToCart(id){
+  requireMember(()=>{
+    const p=products.find(x=>x.id===id);if(!p)return;
+    if(cart[id])cart[id].qty++;else cart[id]={...p,qty:1};
+    updateCartUI();openCart();
+  });
+}
+function updateCartUI(){
+  const items=Object.values(cart);
+  const total=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const count=items.reduce((s,i)=>s+i.qty,0);
+  const badge=document.getElementById('cartBadge');
+  badge.textContent=count;badge.style.display=count>0?'flex':'none';
+  const list=document.getElementById('cartItemsList'),foot=document.getElementById('cartFoot');
+  if(!items.length){
+    list.innerHTML=`<div class="cart-empty-msg">${currentLang==='id'?'Keranjang masih kosong 🌿':'Cart is empty 🌿'}</div>`;
+    foot.style.display='none';return;
+  }
+  foot.style.display='block';
+  document.getElementById('cartTotalVal').textContent='Rp '+total.toLocaleString('id-ID');
+  list.innerHTML=items.map(i=>`
+    <div class="cart-item">
+      <div class="ci-emoji">${i.emoji}</div>
+      <div class="ci-info">
+        <div class="ci-name">${i.name&&i.name[currentLang]?i.name[currentLang]:(i.name||'')}</div>
+        <div class="ci-price">Rp ${(i.price*i.qty).toLocaleString('id-ID')}</div>
+      </div>
+      <div class="ci-qty">
+        <button class="qty-btn" onclick="changeQty('${i.id}',-1)">−</button>
+        <span class="qty-num">${i.qty}</span>
+        <button class="qty-btn" onclick="changeQty('${i.id}',1)">+</button>
+      </div>
+    </div>`).join('');
+}
+function changeQty(id,delta){
+  if(!cart[id])return;
+  cart[id].qty+=delta;
+  if(cart[id].qty<=0)delete cart[id];
+  updateCartUI();
+}
+function openCart(){document.getElementById('cartOverlay').classList.add('open');document.getElementById('cartPanel').classList.add('open');}
+function closeCart(){document.getElementById('cartOverlay').classList.remove('open');document.getElementById('cartPanel').classList.remove('open');}
+
+// ══════════════════════════════════════════
+// PAYMENT
+// ══════════════════════════════════════════
+function openPayModal(){
+  closeCart();
+  selectedDelivery=null;ongkirAmount=0;
+  ['tabPickup','tabDelivery'].forEach(id=>document.getElementById(id).classList.remove('selected'));
+  ['sectionPickup','sectionDelivery'].forEach(id=>document.getElementById(id).classList.remove('visible'));
+  document.getElementById('qrisSection').style.display='none';
+  document.getElementById('ongkirResult').className='ongkir-result';
+  document.getElementById('ongkirRow').style.display='none';
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('pickupDate').min=today;
+  document.getElementById('deliveryDate').min=today;
+  if(currentMember){
+    document.getElementById('payerNamePickup').value=currentMember.name;
+    document.getElementById('payerNameDelivery').value=currentMember.name;
+  }
+  updateQrisTotal();
+  document.getElementById('payModalOverlay').classList.add('open');
+}
+function closePayModal(){document.getElementById('payModalOverlay').classList.remove('open');}
+
+async function goWhatsApp(){
+  if(!selectedDelivery){alert(currentLang==='id'?'Pilih metode pengiriman dulu ya!':'Please select a delivery method first!');return;}
+  const items=Object.values(cart);
+  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const total=sub+ongkirAmount;
+  let dInfo={type:selectedDelivery,date:'',address:''};
+  let dText='';
+  if(selectedDelivery==='pickup'){
+    const date=document.getElementById('pickupDate').value;
+    if(!date){alert(currentLang==='id'?'Pilih tanggal pick up dulu ya!':'Please select a pick up date!');return;}
+    dInfo.date=date;
+    dText=`Pick Up: ${date}`;
+  }else{
+    const date=document.getElementById('deliveryDate').value;
+    const addr=document.getElementById('deliveryAddress').value.trim();
+    const sel=document.getElementById('deliveryKelurahan');
+    const zone=sel.value;
+    if(!date){alert(currentLang==='id'?'Pilih tanggal pengiriman!':'Please select a delivery date!');return;}
+    if(!addr){alert(currentLang==='id'?'Isi alamat lengkap dulu ya!':'Please enter your full address!');return;}
+    if(!zone||zone==='X'){alert(currentLang==='id'?'Maaf, area kamu di luar jangkauan. Silakan Pick Up Store ya!':'Sorry, your area is out of range. Please use Pick Up instead!');return;}
+    dInfo={type:'delivery',date,address:addr};
+    dText=`Delivery: ${date}\nAlamat: ${addr}\nKelurahan: ${sel.options[sel.selectedIndex].text}\nOngkir: Rp ${ongkirAmount.toLocaleString('id-ID')}`;
+  }
+  const name=currentMember?currentMember.name:(document.getElementById('payerNamePickup').value.trim()||'Pelanggan');
+  const phone=currentMember?currentMember.phone:'-';
+  const orderList=items.map(i=>`- ${i.name[currentLang]||i.name.id} ×${i.qty} = Rp ${(i.price*i.qty).toLocaleString('id-ID')}`).join('\n');
+  const msg=`Halo Jus(t) Your Friend Cooking! 🌿\n\nSaya *${name}* (${phone}) mau kirim bukti pembayaran:\n\n*Pesanan:*\n${orderList}\n\nSubtotal: Rp ${sub.toLocaleString('id-ID')}${ongkirAmount?`\nOngkir: Rp ${ongkirAmount.toLocaleString('id-ID')}`:''}\n*Total: Rp ${total.toLocaleString('id-ID')}*\nMetode: QRIS\n\n${dText}\n\n[Lampirkan foto bukti transfer di sini]`;
+  if(currentMember)saveOrderToSheets(currentMember,items,total,'QRIS',dInfo);
+  window._waitingForWaReturn=true;
+  closePayModal();
+  window.open(`https://wa.me/6287823135414?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&window._waitingForWaReturn){
+    window._waitingForWaReturn=false;
+    setTimeout(showThankyou,600);
+  }
+});
+
+function showThankyou(){
+  const name=currentMember?currentMember.name:'Teman';
+  const items=Object.values(cart);
+  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const total=sub+ongkirAmount;
+  document.getElementById('thankyouName').textContent=name;
+  document.getElementById('thankyouRecap').innerHTML=
+    items.map(i=>`<div class="thankyou-recap-row"><span>${i.emoji} ${i.name[currentLang]||i.name.id} ×${i.qty}</span><span>Rp ${(i.price*i.qty).toLocaleString('id-ID')}</span></div>`).join('')+
+    (ongkirAmount?`<div class="thankyou-recap-row"><span>${currentLang==='id'?'Ongkos Kirim':'Delivery Fee'}</span><span>Rp ${ongkirAmount.toLocaleString('id-ID')}</span></div>`:'')+
+    `<div class="thankyou-recap-total"><span class="thankyou-total-label">Total</span><span class="thankyou-total-val">Rp ${total.toLocaleString('id-ID')}</span></div>`;
+  document.getElementById('thankyouOverlay').classList.add('open');
+}
+function closeThankyou(){
+  document.getElementById('thankyouOverlay').classList.remove('open');
+  cart={};ongkirAmount=0;updateCartUI();closePayModal();
+}
+
+// ══════════════════════════════════════════
+// SUBSCRIPTION
+// ══════════════════════════════════════════
+let selectedSubPkgName='';
+function openSubModal(pkg,card){
+  selectedSubPkg=pkg;
+  document.querySelectorAll('.sub-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  const names={
+    detox:{id:'Detox Package',en:'Detox Package'},
+    brightening:{id:'Brightening Package',en:'Brightening Package'},
+    oneshot:{id:'One Shot Package',en:'One Shot Package'}
+  };
+  selectedSubPkgName=names[pkg][currentLang];
+  document.getElementById('subModalPkgName').textContent=selectedSubPkgName;
+  if(currentMember){
+    document.getElementById('subName').value=currentMember.name;
+    document.getElementById('subPhone').value=currentMember.phone;
+  }
+  document.getElementById('subModalOverlay').classList.add('open');
+}
+function closeSubModal(){document.getElementById('subModalOverlay').classList.remove('open');}
+function submitSubOrder(){
+  const name=document.getElementById('subName').value.trim();
+  const phone=document.getElementById('subPhone').value.trim();
+  const address=document.getElementById('subAddress').value.trim();
+  const kel=document.getElementById('subKelurahan').value.trim();
+  const notes=document.getElementById('subNotes').value.trim();
+  if(!name||!phone){alert(currentLang==='id'?'Isi nama dan nomor HP dulu ya!':'Please fill in your name and phone number!');return;}
+  const msg=`Halo Jus(t) Your Friend Cooking! 🌿\n\nSaya *${name}* (${phone}) mau berlangganan:\n\n*Paket:* ${selectedSubPkgName}\n*Harga:* Rp 120.000/minggu · Bebas ongkir\n*Alamat:* ${address||'-'}\n*Kelurahan:* ${kel||'-'}\n*Catatan:* ${notes||'-'}\n\nMohon info pembayaran dan jadwal pengiriman ya! 🙏`;
+  closeSubModal();
+  window.open(`https://wa.me/6287823135414?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ══════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════
+function getBg(cat){
+  return {jus:'linear-gradient(135deg,#FFF3E8,#FFE0C0)',smoothie:'linear-gradient(135deg,#E8F5E0,#C8E8B8)',dessert:'linear-gradient(135deg,#F5E8F5,#E8C8E8)',petsnack:'linear-gradient(135deg,#E8F0F5,#C8DCE8)'}[cat]||'#F4F2EE';
+}
+function renderProducts(){
+  const grid=document.getElementById('productGrid');
+  let f=products;
+  if(currentCat!=='semua')f=f.filter(p=>p.cat===currentCat);
+  if(currentFruit&&currentFruit!=='semua'&&currentCat!=='petsnack')f=f.filter(p=>p.fruit===currentFruit);
+  if(!f.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:3rem;font-family:var(--font-serif);font-style:italic;color:var(--stone)">${currentLang==='id'?'Belum ada menu untuk pilihan ini 🌿':'No menu for this selection 🌿'}</div>`;return;}
+  grid.innerHTML=f.map(p=>`
+    <div class="product-card fade-up visible">
+      <div class="product-img" style="background:${getBg(p.cat)}">
+        ${p.badge?`<div class="product-badge">${typeof p.badge==='object'?p.badge[currentLang]:p.badge}</div>`:''}
+        <span>${p.emoji}</span>
+      </div>
+      <div class="product-body">
+        ${p.fruit?`<div class="product-fruit-tag">${fruits.find(f=>f.id===p.fruit)?.label||''}</div>`:`<div class="product-fruit-tag">Pet Friendly 🐾</div>`}
+        <div class="product-name">${p.name[currentLang]}</div>
+        <div class="product-desc">${p.desc[currentLang]}</div>
+        <div class="product-footer">
+          <div class="product-price"><small>Rp </small>${p.price.toLocaleString('id-ID')}</div>
+          <button class="btn-add" onclick="addToCart(${p.id})">+ ${currentLang==='id'?'Tambah':'Add'}</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function renderRebus(){
+  document.getElementById('rebusGrid').innerHTML=rebusItems.map(r=>`
+    <div class="rebus-item">
+      <div class="rebus-emoji">${r.emoji}</div>
+      <div class="rebus-name">${r.name[currentLang]}</div>
+      <div class="rebus-price-row">
+        <span class="rebus-price-tag" onclick="addRebusToCart('${r.name[currentLang]}',false,this)">Rp 15.000</span>
+        ${r.name.id!=='Telur'?`<span class="rebus-price-tag" onclick="addRebusToCart('${r.name[currentLang]}',true,this)">+ ${currentLang==='id'?'Telur':'Egg'} Rp 18.000</span>`:''}
+      </div>
+    </div>`).join('');
+}
+function addRebusToCart(name,withEgg,btn){
+  requireMember(()=>{
+    const label=withEgg?`${name} + ${currentLang==='id'?'Telur':'Egg'}`:name;
+    const price=withEgg?18000:15000;
+    const id=`rebus-${label}`;
+    if(!cart[id])cart[id]={id,name:{id:label,en:label},price,emoji:'🥣',qty:1};
+    else cart[id].qty++;
+    updateCartUI();openCart();
+  });
+}
+function filterCat(cat,btn){
+  currentCat=cat;currentFruit='semua';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const fw=document.getElementById('fruitTabsWrap'),ft=document.getElementById('fruitTabs');
+  if(['jus','smoothie','dessert'].includes(cat)){
+    const rf=[...new Set(products.filter(p=>p.cat===cat&&p.fruit).map(p=>p.fruit))];
+    ft.innerHTML=`<button class="fruit-tab active" onclick="filterFruit('semua',this)">🌿 ${currentLang==='id'?'Semua':'All'}</button>`+
+      rf.map(fid=>{const fr=fruits.find(x=>x.id===fid);return fr?`<button class="fruit-tab" onclick="filterFruit('${fr.id}',this)">${fr.label}</button>`:''}).join('');
+    fw.classList.add('visible');
+  }else{fw.classList.remove('visible');}
+  renderProducts();
+}
+function filterFruit(fruit,btn){
+  currentFruit=fruit;
+  document.querySelectorAll('.fruit-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+// ══════════════════════════════════════════
+// TESTIMONY
+// ══════════════════════════════════════════
+function setRating(n){selectedRating=n;document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('lit',i<n));}
+async function submitTestimony(){
+  const name=document.getElementById('testiName').value.trim();
+  const phone=document.getElementById('testiPhone').value.trim();
+  const msg=document.getElementById('testiMsg').value.trim();
+  const hide=document.getElementById('hidePrivacy').checked;
+  if(!name||!phone||!msg||selectedRating===0){alert(currentLang==='id'?'Lengkapi semua kolom dan rating ya!':'Please fill in all fields and rating!');return;}
+  try{await apiCall({action:'saveTestimoni',name,phone:normPhone(phone),rating:selectedRating,message:msg,hidePrivacy:hide,timestamp:new Date().toISOString()});}catch(e){}
+  document.getElementById('testiName').value='';
+  document.getElementById('testiPhone').value='';
+  document.getElementById('testiMsg').value='';
+  selectedRating=0;setRating(0);
+  alert(currentLang==='id'?'Makasih udah berbagi cerita! 🌿\nTestimoni kamu sedang kami review.':'Thanks for sharing! 🌿\nWe\'ll review your testimony soon.');
+}
+
+// ══════════════════════════════════════════
+// MEMBER PILL & LOGOUT
+// ══════════════════════════════════════════
+function updateMemberPill(name){
+  document.getElementById('navMemberName').textContent=name;
+  document.getElementById('navMemberPill').classList.add('visible');
+}
+function openLogoutModal(){
+  document.getElementById('logoutName').textContent=currentMember?currentMember.name:'';
+  document.getElementById('logoutOverlay').classList.add('open');
+}
+function closeLogoutModal(){document.getElementById('logoutOverlay').classList.remove('open');}
+function confirmLogout(){
+  currentMember=null;cart={};_pendingCartAction=null;_afterPrevOrder=null;
+  document.getElementById('memberName').value='';
+  document.getElementById('memberPhone').value='';
+  clearMemberError();updateCartUI();
+  document.getElementById('navMemberPill').classList.remove('visible');
+  closeLogoutModal();dismissWelcome();
+}
+
+// ══════════════════════════════════════════
+// SCROLL ANIMATION
+// ══════════════════════════════════════════
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});
+},{threshold:.08});
+document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+renderProducts();
+renderRebus();
+updateCartUI();
+initBanner();
+</script>
+</body>
+</html>
